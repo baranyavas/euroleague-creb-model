@@ -1,44 +1,78 @@
-# EuroLeague C-REB Model
+# euroleague c-reb model
 
-A data-driven research model for EuroLeague credit-rebound markets.
+a data-driven research model for euroleague credit-rebound markets.
 
-## Settlement definition
-**C-REB = player Offensive Rebounds + player Defensive Rebounds.**
-Team Rebounds are excluded from the target because the market settles strictly on individual player rebound credits.
+## settlement definition
 
-## Model structure
-1. Team C-REB baseline
-2. Opponent C-REB baseline
-3. H2H
-4. Possessions / Pace
-5. FGA
-6. Missed FG
-7. 3PA / 3P%
-8. ORB profile
-9. Opponent ORB / DRB profile
-10. Team Rebounds (context only)
-11. Frontcourt continuity (low weight initially)
-12. REBOPPR-T = Total C-REB / total missed FG
-13. REBOPPR-O = Team ORB / own missed FG
-14. REBOPPR-D = Team DRB / opponent missed FG
-15. Rolling C-REB
-16. Pace-adjusted residual
+**c-reb = player offensive rebounds + player defensive rebounds.**
+
+team rebounds are excluded from the settlement target.
+
+## model structure
+
+1. team c-reb baseline
+2. opponent c-reb baseline
+3. h2h
+4. possessions / pace
+5. fga
+6. missed fg
+7. 3pa / 3p%
+8. orb profile
+9. opponent orb / drb profile
+10. team rebounds (context only)
+11. frontcourt continuity (low weight initially)
+12. reboppr-t = total c-reb / total missed fg
+13. reboppr-o = team orb / own missed fg
+14. reboppr-d = team drb / opponent missed fg
+15. rolling c-reb
+16. pace-adjusted residual
 
 ## 2025-26 first findings
+
 - 380 regular-season games
-- Mean C-REB: 62.01
-- Median: 61
-- SD: 7.56
-- 70+ C-REB: 55/380 (14.5%)
-- 80+ C-REB: 5/380 (1.3%)
-- C-REB vs Missed FG correlation: 0.907
-- Missed-FG single-variable OLS R²: 0.823
+- mean c-reb: 62.01
+- median: 61
+- sd: 7.56
+- 70+ c-reb: 55/380 (14.5%)
+- 80+ c-reb: 5/380 (1.3%)
+- c-reb vs missed fg correlation: 0.907
+- missed-fg single-variable ols r²: 0.823
 
-## Research principle
-The model does not attempt to explain every rebound event. Basketball rebounds contain stochastic variation. The goal is to explain the systematic component and leave the residual as an explicit uncertainty term.
+## forecasting philosophy
 
-Historical lines, live decision-time lines, model projections and actual C-REB results are tracked separately. The provider line is treated as fixed once opened.
+the primary objective is **pregame forecasting**, not postgame storytelling.
 
-## Data source
-IvoVillanueva/EUROLEAGUE-BOXSCORE player-game data:
+c-reb contains genuine stochastic variation. the model is expected to explain the systematic component of the rebound environment, while residual variation remains explicit.
+
+current-season g1/g2 information is added gradually and shrunk toward the historical baseline because two games are a very small sample. the current-season weight should increase only as the sample grows.
+
+the main opportunity rule is:
+
+**high fga OR low fg%.**
+
+the combination of both conditions is treated as an extreme subgroup rather than the normal filter.
+
+reboppr is a normalization index used for forecasting and diagnostics. it is not a literal probability and may exceed 1.
+
+## forecast vs line
+
+the provider line is a separate market input. it does not determine the model forecast.
+
+we record the line available when the forecast/betting decision is made. if the provider changes its line before that decision, the latest available line is the decision line. historical forecasts are never rewritten after the fact.
+
+the workflow is:
+
+**data -> pregame forecast -> provider line -> gap -> decision/pass -> actual result -> residual analysis**
+
+## code
+
+the first executable model skeleton is in:
+model/creb_model_v0_4.py
+
+it implements the current forecast structure, current-season shrinkage, reboppr handling, opportunity flags and forecast-vs-line comparison.
+
+## data source
+
+ivo villanueva / euroleague boxscore player-game data:
+
 https://github.com/IvoVillanueva/EUROLEAGUE-BOXSCORE
