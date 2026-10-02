@@ -26,6 +26,7 @@ team rebounds are excluded from the settlement target.
 14. reboppr-d = team drb / opponent missed fg
 15. rolling c-reb
 16. pace-adjusted residual
+17. current-season team identity signal (shrunk toward historical baseline)
 
 ## 2025-26 first findings
 
@@ -44,7 +45,9 @@ the primary objective is **pregame forecasting**, not postgame storytelling.
 
 c-reb contains genuine stochastic variation. the model is expected to explain the systematic component of the rebound environment, while residual variation remains explicit.
 
-current-season g1/g2 information is added gradually and shrunk toward the historical baseline because two games are a very small sample. the current-season weight should increase only as the sample grows.
+current-season g1/g2 information is added gradually and shrunk toward the historical baseline because two games are a very small sample. the v0.7 identity signal captures a team's current c-reb shift versus its historical baseline, but the effect is deliberately capped and low-weight until out-of-sample validation supports a stronger adjustment.
+
+h2h is a separate anchor from the full-season historical baseline. stable h2h is allowed to contribute modestly; unstable h2h is shrunk more heavily.
 
 the main opportunity rule is:
 
@@ -53,6 +56,22 @@ the main opportunity rule is:
 the combination of both conditions is treated as an extreme subgroup rather than the normal filter.
 
 reboppr is a normalization index used for forecasting and diagnostics. it is not a literal probability and may exceed 1.
+
+## v0.7 regression layer
+
+`model/creb_model_v0_7.py` adds:
+
+- two-stage opportunity -> rebound-realization structure
+- matchup-adjusted reboppr-o / reboppr-d
+- shrunk current-season team-identity signal
+- stability-weighted h2h
+- game-level `statsmodels` OLS fitting utility
+
+regression fitting must use game-level rows and is intentionally separate from provider lines. the existing 2025-26 single-variable relationship is retained as the historical fallback anchor:
+
+`c-reb = 3.126 + 0.8719 * missed_fg`
+
+no new multivariable coefficient is treated as validated until it is fit on game-level data and checked out of sample.
 
 ## forecast vs line
 
@@ -66,10 +85,8 @@ the workflow is:
 
 ## code
 
-the first executable model skeleton is in:
-model/creb_model_v0_4.py
-
-it implements the current forecast structure, current-season shrinkage, reboppr handling, opportunity flags and forecast-vs-line comparison.
+- `model/creb_model_v0_4.py` — first executable model skeleton
+- `model/creb_model_v0_7.py` — current experimental forecasting framework and regression utility
 
 ## data source
 
