@@ -27,6 +27,7 @@ team rebounds are excluded from the settlement target.
 15. rolling c-reb
 16. pace-adjusted residual
 17. current-season team identity signal (shrunk toward historical baseline)
+18. h2h stability / closeness signal
 
 ## 2025-26 first findings
 
@@ -39,15 +40,67 @@ team rebounds are excluded from the settlement target.
 - c-reb vs missed fg correlation: 0.907
 - missed-fg single-variable ols r²: 0.823
 
+## 2026-27 early data
+
+through round 3, 14 games have been entered into the live tracking sample (round 2: 10 games; round 3: 4 games).
+
+- w2 mean c-reb: 60.8
+- w2 under rate vs recorded provider decision lines: 9/10 (90.0%)
+- w3 mean c-reb: 79.25
+- w3 under rate vs recorded provider decision lines: 1/4 (25.0%)
+- combined w2+w3: **10/14 unders (71.4%)**
+- this is an observation, not a validated market-edge estimate; the sample is still very small.
+
+w3 also demonstrated why the model cannot simply impose a permanent low-rebound bias. all four w3 games had reboppr-t >= 1.000, compared with a 2025-26 mean of about 0.919. high rebound realization materially changed the realized totals.
+
+## h2h principle
+
+h2h is not just a generic average. the model explicitly tracks the previous season's first and second regular-season meetings.
+
+when **h2h-1 c-reb and h2h-2 c-reb are close to each other**, that stability is treated as evidence that the matchup may have a repeatable rebound environment. the h2h average can then receive more weight than it would receive when the two meetings are far apart.
+
+when the two h2h results are materially different, the h2h signal is shrunk toward the broader historical/current-season evidence. playoffs are excluded from this anchor.
+
+h2h also tracks the opportunity environment and orb/drb profile where data are available. the goal is to identify matchup-specific structure without hard-coding a direction such as under or over.
+
+## team identity and abbreviations
+
+team identity is allowed to emerge from the data rather than being manually assigned as a bias. current-season c-reb is shrunk toward the historical baseline and the effect is capped/low-weight until validation supports stronger use.
+
+for compact tracking, teams use stable three-letter ids:
+
+| team | id |
+|---|---|
+| Anadolu Efes | EFE |
+| ASVEL | ASV |
+| Barcelona | BAR |
+| Baskonia | BAS |
+| Bayern Munich | BAY |
+| Besiktas | BJK |
+| Crvena Zvezda | ZVE |
+| Dubai Basketball | DUB |
+| Fenerbahce | FEN |
+| Hapoel Tel Aviv | HAP |
+| Maccabi Tel Aviv | MAC |
+| Milano | MIL |
+| Olympiacos | OLY |
+| Panathinaikos | PAN |
+| Paris Basketball | PAR |
+| Partizan | PTZ |
+| Real Madrid | RMA |
+| Valencia Basket | VAL |
+| Virtus Bologna | VIR |
+| Zalgiris Kaunas | ZAL |
+
+these ids are bookkeeping labels only. they do not encode a prior belief about a team's rebound strength.
+
 ## forecasting philosophy
 
 the primary objective is **pregame forecasting**, not postgame storytelling.
 
 c-reb contains genuine stochastic variation. the model is expected to explain the systematic component of the rebound environment, while residual variation remains explicit.
 
-current-season g1/g2 information is added gradually and shrunk toward the historical baseline because two games are a very small sample. the v0.7 identity signal captures a team's current c-reb shift versus its historical baseline, but the effect is deliberately capped and low-weight until out-of-sample validation supports a stronger adjustment.
-
-h2h is a separate anchor from the full-season historical baseline. stable h2h is allowed to contribute modestly; unstable h2h is shrunk more heavily.
+current-season g1/g2/g3 information is added gradually and shrunk toward the historical baseline because two or three games are still a small sample. the v0.7 identity signal captures a team's current c-reb shift versus its historical baseline, but the effect is deliberately capped and low-weight until out-of-sample validation supports a stronger adjustment.
 
 the main opportunity rule is:
 
@@ -65,7 +118,7 @@ reboppr is a normalization index used for forecasting and diagnostics. it is not
 - matchup-adjusted reboppr-o / reboppr-d
 - shrunk current-season team-identity signal
 - stability-weighted h2h
-- game-level `statsmodels` OLS fitting utility
+- game-level `statsmodels` ols fitting utility
 
 regression fitting must use game-level rows and is intentionally separate from provider lines. the existing 2025-26 single-variable relationship is retained as the historical fallback anchor:
 
@@ -82,6 +135,23 @@ we record the line available when the forecast/betting decision is made. if the 
 the workflow is:
 
 **data -> pregame forecast -> provider line -> gap -> decision/pass -> actual result -> residual analysis**
+
+## decision registry
+
+`data/decision_registry.md` is the chronological experiment ledger. every tracked game should preserve:
+
+- date / round
+- three-letter team ids
+- pregame model forecast
+- provider decision line
+- model-to-line gap
+- actual c-reb
+- actual-minus-model residual
+- under / over / push against the decision line
+- whether the game was used in a combo
+- postgame diagnostic notes
+
+missing pregame forecasts are recorded as `not recorded` rather than reconstructed after the game. this prevents hindsight leakage.
 
 ## code
 
