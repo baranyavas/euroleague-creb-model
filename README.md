@@ -47,12 +47,12 @@ through round 3, 14 games have been entered into the live tracking sample (round
 
 - w2 mean c-reb: 60.8
 - w2 under rate vs recorded provider decision lines: 9/10 (90.0%)
-- w3 mean c-reb: 79.25
-- w3 under rate vs recorded provider decision lines: 1/4 (25.0%)
-- combined w2+w3: **10/14 unders (71.4%)**
+- w3 mean c-reb: 74.25
+- w3 under rate vs recorded provider decision lines: 2/4 (50.0%)
+- combined w2+w3: **11/14 unders (78.6%)**
 - this is an observation, not a validated market-edge estimate; the sample is still very small.
 
-w3 also demonstrated why the model cannot simply impose a permanent low-rebound bias. all four w3 games had reboppr-t >= 1.000, compared with a 2025-26 mean of about 0.919. high rebound realization materially changed the realized totals.
+w3 also demonstrated why the model cannot simply impose a permanent low-rebound bias. the four w3 games showed elevated rebound realization, with reboppr-t at or above 1.000 in the tracked calculations. high rebound realization materially changed realized totals.
 
 ## h2h principle
 
