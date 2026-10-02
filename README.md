@@ -35,6 +35,7 @@ This settlement rule was re-checked after the 2026-10-02 games. Example: Besikta
 17. current-season team identity signal (shrunk toward historical baseline)
 18. h2h stability / closeness signal
 19. adaptive residual calibration
+20. current-vs-h2h regime similarity (v0.8.2 research layer)
 
 ## 2025-26 first findings
 
@@ -90,7 +91,7 @@ h2h also tracks the opportunity environment and orb/drb profile where data are a
 
 ### new w4 h2h variable: current-vs-h2h similarity
 
-For W4 review, add a separate **current-vs-h2h regime-similarity signal** rather than simply increasing h2h weight.
+v0.8.2 adds a standalone **current-vs-h2h regime-similarity signal**. The first implementation is deliberately a research/diagnostic layer; it does not automatically change live forecasts until it is tested on the frozen W1-W3 sample and then out of sample.
 
 For each matchup with usable previous-season meetings, compare the current-season matchup environment with the previous-season h2h environment across:
 
@@ -99,11 +100,13 @@ For each matchup with usable previous-season meetings, compare the current-seaso
 - reboppr-t
 - where available, reboppr-o and reboppr-d
 - opportunity / shot-volume environment
-- orb/drb profile
+- orb/drb profile where available
 
 The question is: **does this year's version of the matchup still look statistically like last year's matchup?**
 
 If the current environment is close to the h2h environment, the h2h signal can retain more weight. If it has materially changed, the h2h contribution should be shrunk toward broader historical and current-season evidence.
+
+The implementation lives in `model/creb_model_v0_8_2.py` and returns a 0-1 regime-similarity score plus a conservative h2h-weight multiplier. The feature uses normalized distances and renormalizes weights when some inputs are unavailable.
 
 This is a **time-stability / regime-similarity variable**, not a manual preference for h2h. A Fenerbahce–Dubai-style case should therefore be evaluated by comparing last season's two meetings with the current-season meeting rather than looking only at the old h2h average.
 
@@ -169,6 +172,8 @@ provider lines are never used to create this correction. market bias and model b
 
 `model/creb_model_v0_8.py` adds the adaptive residual-calibration layer.
 
+`model/creb_model_v0_8_2.py` adds the current-vs-h2h regime-similarity diagnostic layer.
+
 regression fitting must use game-level rows and is intentionally separate from provider lines. the existing 2025-26 single-variable relationship is retained as the historical fallback anchor:
 
 `c-reb = 3.126 + 0.8719 * missed_fg`
@@ -186,6 +191,8 @@ the workflow is:
 **data -> pregame forecast -> provider line -> gap -> decision/pass -> actual result -> residual analysis -> calibrated next forecast**
 
 The 2026-10-02 card also reinforced an execution rule: provider lines appeared around one hour before tip, and the decision was made at approximately 20:50 after the relevant lines were available. This timing is an execution observation, not a forecasting feature.
+
+The day-2 card also suggested that **model-to-line gap deserves explicit out-of-sample testing**: the model's largest-gap games were the most attractive candidates on the card, but the sample is too small to conclude that gap magnitude itself is predictive.
 
 ## decision registry
 
