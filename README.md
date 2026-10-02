@@ -28,6 +28,7 @@ team rebounds are excluded from the settlement target.
 16. pace-adjusted residual
 17. current-season team identity signal (shrunk toward historical baseline)
 18. h2h stability / closeness signal
+19. adaptive residual calibration
 
 ## 2025-26 first findings
 
@@ -100,7 +101,7 @@ the primary objective is **pregame forecasting**, not postgame storytelling.
 
 c-reb contains genuine stochastic variation. the model is expected to explain the systematic component of the rebound environment, while residual variation remains explicit.
 
-current-season g1/g2/g3 information is added gradually and shrunk toward the historical baseline because two or three games are still a small sample. the v0.7 identity signal captures a team's current c-reb shift versus its historical baseline, but the effect is deliberately capped and low-weight until out-of-sample validation supports a stronger adjustment.
+current-season g1/g2/g3 information is added gradually and shrunk toward the historical baseline because two or three games are still a small sample. the identity signal captures a team's current c-reb shift versus its historical baseline, but the effect is deliberately capped and low-weight until out-of-sample validation supports a stronger adjustment.
 
 the main opportunity rule is:
 
@@ -110,15 +111,28 @@ the combination of both conditions is treated as an extreme subgroup rather than
 
 reboppr is a normalization index used for forecasting and diagnostics. it is not a literal probability and may exceed 1.
 
-## v0.7 regression layer
+## adaptive learning / shrinkage
 
-`model/creb_model_v0_7.py` adds:
+the model is allowed to learn from its own historical forecast errors without manually imposing an under or over bias.
 
-- two-stage opportunity -> rebound-realization structure
-- matchup-adjusted reboppr-o / reboppr-d
-- shrunk current-season team-identity signal
-- stability-weighted h2h
-- game-level `statsmodels` ols fitting utility
+for each completed game:
+
+`residual = actual c-reb - pregame forecast`
+
+- positive residual -> the model was too low
+- negative residual -> the model was too high
+
+v0.8 adds an empirical-Bayes style residual correction. the observed residual mean is shrunk toward zero using a prior sample size, and the correction is capped. therefore a short streak cannot suddenly move every future forecast by a large amount.
+
+this creates the desired behavior: the model can gradually move a forecast upward or downward when the data repeatedly show that it is miscalibrated, while remaining neutral when the evidence is weak.
+
+provider lines are never used to create this correction. market bias and model bias remain separate.
+
+## regression layer
+
+`model/creb_model_v0_7.py` contains the main forecasting framework and game-level `statsmodels` ols utility.
+
+`model/creb_model_v0_8.py` adds the adaptive residual-calibration layer.
 
 regression fitting must use game-level rows and is intentionally separate from provider lines. the existing 2025-26 single-variable relationship is retained as the historical fallback anchor:
 
@@ -130,11 +144,11 @@ no new multivariable coefficient is treated as validated until it is fit on game
 
 the provider line is a separate market input. it does not determine the model forecast.
 
-we record the line available when the forecast/betting decision is made. if the provider changes its line before that decision, the latest available line is the decision line. historical forecasts are never rewritten after the fact.
+we record the line available when the forecast/betting decision is made. historical forecasts are never rewritten after the fact.
 
 the workflow is:
 
-**data -> pregame forecast -> provider line -> gap -> decision/pass -> actual result -> residual analysis**
+**data -> pregame forecast -> provider line -> gap -> decision/pass -> actual result -> residual analysis -> calibrated next forecast**
 
 ## decision registry
 
@@ -156,7 +170,8 @@ missing pregame forecasts are recorded as `not recorded` rather than reconstruct
 ## code
 
 - `model/creb_model_v0_4.py` — first executable model skeleton
-- `model/creb_model_v0_7.py` — current experimental forecasting framework and regression utility
+- `model/creb_model_v0_7.py` — forecasting framework, identity signal, h2h stability and regression utility
+- `model/creb_model_v0_8.py` — adaptive empirical-Bayes residual calibration
 
 ## data source
 
