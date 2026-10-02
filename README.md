@@ -76,7 +76,7 @@ The day-2 forecasts and outcomes were:
 | panathinaikos–maccabi | 67 | 70.5 | 66 | -1 | under |
 | baskonia–milano | 65 | 72.5 | 62 | -3 | under |
 
-The practical decision process also showed that the largest model-to-line gaps were the games receiving the most attention, while forecasts remained locked before lines were considered. On this card, the three-leg selection of ASVEL U71.5, Bayern U66.5 and Baskonia U72.5 went 3/3; adding Fenerbahce U69.5 would have made 4/4, while Besiktas U66.5 was the only loss among those five selected directions.
+The practical decision process also showed that the largest model-to-line gaps were the games receiving the most attention, while forecasts remained locked before lines were considered. On this card, the three-leg selection of ASVEL U71.5, Bayern U66.5 and Baskonia U72.5 went 3/3; adding Fenerbahce U69.5 would have made 4/4. Besiktas U66.5 was the only loss among those five selected directions.
 
 ## h2h principle
 
@@ -115,13 +115,12 @@ The 2026-10-02 six-game card had team-rebound totals of:
 
 **6, 6, 3, 8, 9, 3**
 
-This produced several useful examples:
+Examples:
 
-- besiktas: 40 total-row rebounds = **39 c-reb + 1 team rebound**
+- beşiktaş: 40 total-row rebounds = **39 c-reb + 1 team rebound**
 - barcelona: 34 total-row rebounds = **29 c-reb + 5 team rebounds**
-- fenerbahce: 39 total-row rebounds = **36?**
-
-Correction: team-rebound accounting must always be read directly from the box-score rows; the model's target remains `total T - team T`.
+- panathinaikos: 43 total-row rebounds = **37 c-reb + 6 team rebounds**
+- maccabi: 41 total-row rebounds = **38 c-reb + 3 team rebounds**
 
 The main hypothesis is that whether a missed shot becomes a player-credited rebound or a team rebound contains a substantial stochastic component from a pregame perspective. A specific loose ball, out-of-bounds deflection, team-control sequence, or other box-score classification cannot generally be predicted for an individual possession.
 
