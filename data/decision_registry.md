@@ -2,22 +2,27 @@
 
 chronological experiment ledger. this file preserves the information available at decision time and does not reconstruct missing forecasts after the game.
 
+## settlement definition
+
+settled c-reb is **total-row T - team-row T**. the bottom total-row O + D must not be used directly because team rebounds are embedded in the total-row defensive-rebound figure.
+
 ## summary
 
 | sample | games | under | over | push | under rate |
 |---|---:|---:|---:|---:|---:|
 | w2 | 10 | 9 | 1 | 0 | 90.0% |
-| w3 | 4 | 2 | 2 | 0 | 50.0% |
-| w2+w3 | 14 | 11 | 3 | 0 | 78.6% |
+| w3 | 10 | 7 | 3 | 0 | 70.0% |
+| w2+w3 | 20 | **16** | 4 | 0 | **80.0%** |
 
-**important:** the 14-game sample is 11 unders, not 10. w2 was 9/10 and w3 is 2/4 after correcting Virtus–Olympiacos settlement to 68 c-reb.
+w3 day 1 was 2/4 under. w3 day 2 was 5/6 under.
 
 ## registry columns
 
 - `model forecast`: locked pregame yavasian forecast
 - `line`: provider decision line available when the decision was made
 - `gap`: model forecast - provider line; negative means the model was below the market
-- `actual`: settled c-reb = player-credited orb + player-credited drb
+- `actual`: settled c-reb = total-row T - team-row T
+- `team rebounds`: team-row T, excluded from settled c-reb
 - `result`: under / over / push against the decision line
 - `model call`: directional call implied by forecast vs line
 - `call correct`: whether the model call matched the settled result
@@ -25,42 +30,66 @@ chronological experiment ledger. this file preserves the information available a
 
 `nr` means the numeric pregame forecast was not recorded. it is intentionally not reconstructed from postgame information.
 
-## round 2 — 2026-09-29
+## round 2 — 2026-09-29 / 2026-09-30
 
-| date | round | teams | ids | model forecast | line | gap | actual | result | model call | call correct | notes |
-|---|---:|---|---|---:|---:|---:|---:|---|---|---|---|
-| 2026-09-29 | 2 | Efes–Real Madrid | EFE–RMA | nr | 69.5 | nr | 54 | under | nr | nr | played; combo leg |
-| 2026-09-29 | 2 | Paris–Partizan | PAR–PTZ | nr | 71.5 | nr | 56 | under | nr | nr | played; combo leg |
-| 2026-09-29 | 2 | Valencia–Baskonia | VAL–BAS | nr | 73.5 | nr | 70 | under | nr | nr | played; combo leg |
-| 2026-09-29 | 2 | Zvezda–Hapoel | ZVE–HAP | nr | 70.5 | nr | 82 | over | nr | nr | postgame outlier; actual c-reb 82 |
-| 2026-09-29 | 2 | Dubai–Barcelona | DUB–BAR | nr | 69.5 | nr | 53 | under | nr | nr | actual c-reb 53 |
-| 2026-09-29 | 2 | Fenerbahce–Bayern | FEN–BAY | nr | 69.5 | nr | 57 | under | nr | nr | actual c-reb 57 |
-| 2026-09-29 | 2 | Milano–Virtus | MIL–VIR | nr | 73.5 | nr | 71 | under | nr | nr | actual c-reb 71 |
-| 2026-09-29 | 2 | Zalgiris–Olympiacos | ZAL–OLY | nr | 73.5 | nr | 57 | under | nr | nr | actual c-reb 57 |
-| 2026-09-30 | 3 | Maccabi–Besiktas | MAC–BJK | 66 | 66.5 | -0.5 | 47 | under | under | yes | played; decision line 66.5; later line 65.5 |
-| 2026-09-30 | 3 | Panathinaikos–ASVEL | PAN–ASV | 67 | 67.5 | -0.5 | 61 | under | under | yes | played; decision line 67.5; later line 66.5 |
+| date | round | teams | ids | model forecast | line | gap | actual | team rebounds | result | model call | call correct | notes |
+|---|---:|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| 2026-09-29 | 2 | Efes–Real Madrid | EFE–RMA | nr | 69.5 | nr | 54 | nr | under | nr | nr | played; combo leg |
+| 2026-09-29 | 2 | Paris–Partizan | PAR–PTZ | nr | 71.5 | nr | 56 | nr | under | nr | nr | played; combo leg |
+| 2026-09-29 | 2 | Valencia–Baskonia | VAL–BAS | nr | 73.5 | nr | 70 | nr | under | nr | nr | played; combo leg |
+| 2026-09-29 | 2 | Zvezda–Hapoel | ZVE–HAP | nr | 70.5 | nr | 82 | nr | over | nr | nr | postgame outlier; actual c-reb 82 |
+| 2026-09-29 | 2 | Dubai–Barcelona | DUB–BAR | nr | 69.5 | nr | 53 | nr | under | nr | nr | actual c-reb 53 |
+| 2026-09-29 | 2 | Fenerbahce–Bayern | FEN–BAY | nr | 69.5 | nr | 57 | nr | under | nr | nr | actual c-reb 57 |
+| 2026-09-29 | 2 | Milano–Virtus | MIL–VIR | nr | 73.5 | nr | 71 | nr | under | nr | nr | actual c-reb 71 |
+| 2026-09-29 | 2 | Zalgiris–Olympiacos | ZAL–OLY | nr | 73.5 | nr | 57 | nr | under | nr | nr | actual c-reb 57 |
+| 2026-09-30 | 3 | Maccabi–Besiktas | MAC–BJK | 66 | 66.5 | -0.5 | 47 | nr | under | under | yes | played; decision line 66.5; later line 65.5 |
+| 2026-09-30 | 3 | Panathinaikos–ASVEL | PAN–ASV | 67 | 67.5 | -0.5 | 61 | nr | under | under | yes | played; decision line 67.5; later line 66.5 |
 
 ## round 3 — 2026-10-01
 
 pregame forecasts below are the rough locked centers used before the games. they are retained as recorded rather than rewritten after the results.
 
-| date | round | teams | ids | model forecast | line | gap | actual | result | model call | call correct | notes |
-|---|---:|---|---|---:|---:|---:|---:|---|---|---|---|
-| 2026-10-01 | 3 | Hapoel–Real Madrid | HAP–RMA | 63.5 | 71.5 | -8.0 | 68 | under | under | yes | actual: 68 c-reb; 65 missed fg; reboppr-t 1.046 |
-| 2026-10-01 | 3 | Zvezda–Efes | ZVE–EFE | 65.5 | 71.5 | -6.0 | 89 | over | under | no | actual: 89 c-reb; 84 missed fg; reboppr-t 1.060 |
-| 2026-10-01 | 3 | Virtus–Olympiacos | VIR–OLY | 63.5 | 69.5 | -6.0 | 68 | under | under | yes | corrected settlement: 68 c-reb; 75 total rebounds in the source box score; team rebounds excluded from c-reb |
-| 2026-10-01 | 3 | Paris–Zalgiris | PAR–ZAL | 64.5 | 71.5 | -7.0 | 85 | over | under | no | actual: 85 c-reb; 77 missed fg; reboppr-t 1.104 |
+| date | round | teams | ids | model forecast | line | gap | actual | team rebounds | result | model call | call correct | notes |
+|---|---:|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| 2026-10-01 | 3 | Hapoel–Real Madrid | HAP–RMA | 63.5 | 71.5 | -8.0 | 68 | 9 | under | under | yes | 65 missed fg; reboppr-t 1.046 |
+| 2026-10-01 | 3 | Zvezda–Efes | ZVE–EFE | 65.5 | 71.5 | -6.0 | 89 | 5 | over | under | no | 84 missed fg; reboppr-t 1.060 |
+| 2026-10-01 | 3 | Virtus–Olympiacos | VIR–OLY | 63.5 | 69.5 | -6.0 | 68 | 7 | under | under | yes | total-row T=75; team-row T=7; settled c-reb=68 |
+| 2026-10-01 | 3 | Paris–Zalgiris | PAR–ZAL | 64.5 | 71.5 | -7.0 | 85 | 13 | over | under | no | 77 missed fg; reboppr-t 1.104 |
 
-## w3 postgame diagnostic
+## round 3 — 2026-10-02
 
-using the corrected c-reb settlement for Virtus–Olympiacos, w3 finished 2/4 under.
+| date | round | teams | ids | model forecast | line | gap | actual | team rebounds | result | model call | call correct | notes |
+|---|---:|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| 2026-10-02 | 3 | Besiktas–Barcelona | BJK–BAR | 59 | 66.5 | -7.5 | 68 | 6 | over | under | no | actual total-row T=74; team-row T=6; settled c-reb=68 |
+| 2026-10-02 | 3 | Fenerbahce–Dubai | FEN–DUB | 67 | 69.5 | -2.5 | 64 | 6 | under | under | yes | settled c-reb=64 |
+| 2026-10-02 | 3 | Bayern–Partizan | BAY–PTZ | 61 | 66.5 | -5.5 | 63 | 3 | under | under | yes | settled c-reb=63 |
+| 2026-10-02 | 3 | ASVEL–Valencia | ASV–VAL | 64 | 71.5 | -7.5 | 69 | 8 | under | under | yes | settled c-reb=69 |
+| 2026-10-02 | 3 | Panathinaikos–Maccabi | PAN–MAC | 67 | 70.5 | -3.5 | 66 | 9 | under | under | yes | settled c-reb=66 |
+| 2026-10-02 | 3 | Baskonia–Milano | BAS–MIL | 65 | 72.5 | -7.5 | 62 | 3 | under | under | yes | settled c-reb=62 |
 
-- HAP–RMA: 68 / 65 = 1.046
-- ZVE–EFE: 89 / 84 = 1.060
-- VIR–OLY: 68 c-reb; 75 total rebounds, with team rebounds excluded from settlement
-- PAR–ZAL: 85 / 77 = 1.104
+## round 3 postgame diagnostic
 
-this is a useful warning against manually forcing a low-rebound bias. the tracked w3 games showed elevated rebound realization, but the settlement definition must remain fixed: player-credited orb + player-credited drb, with team rebounds excluded.
+w3 finished **7/10 under**.
+
+### 2026-10-01
+
+- HAP–RMA: 68 c-reb / 65 missed fg; reboppr-t 1.046
+- ZVE–EFE: 89 c-reb / 84 missed fg; reboppr-t 1.060
+- VIR–OLY: 68 c-reb; total-row T=75; team-row T=7
+- PAR–ZAL: 85 c-reb / 77 missed fg; reboppr-t 1.104
+
+### 2026-10-02
+
+- BJK–BAR: 68 c-reb; total-row T=74; team-row T=6
+- FEN–DUB: 64 c-reb; team-row T=6
+- BAY–PTZ: 63 c-reb; team-row T=3
+- ASV–VAL: 69 c-reb; team-row T=8
+- PAN–MAC: 66 c-reb; team-row T=9
+- BAS–MIL: 62 c-reb; team-row T=3
+
+Day 2 model average = 63.83; actual average = 65.33; average residual = +1.50. Provider lines averaged 69.5.
+
+The six day-2 games demonstrate why c-reb must be separated from team rebounds. For example, Besiktas had 40 total-row rebounds but only 1 team rebound, giving 39 c-reb; Barcelona had 34 total-row rebounds and 5 team rebounds, giving 29 c-reb.
 
 ## h2h tracking rule
 
@@ -73,16 +102,21 @@ for every matchup with previous-season regular-season meetings, record:
 5. a continuous closeness/stability measure
 6. h2h opportunity environment where available
 7. h2h orb/drb profile where available
+8. current-vs-h2h regime similarity for w4 review
 
-when h2h-1 and h2h-2 are close, the matchup-specific signal is allowed to retain more weight. when they are far apart, the signal is shrunk toward the broader historical/current-season evidence. this is a structural rule, not an under bias.
+when h2h-1 and h2h-2 are close, the matchup-specific signal is allowed to retain more weight. when they are far apart, the signal is shrunk toward the broader historical/current-season evidence.
+
+The new W4 variable asks whether the current-season version of the matchup still resembles last season's h2h environment across c-reb, missed fg, reboppr, opportunity and orb/drb profile. This is a time-stability test, not a manual h2h preference.
 
 ## current experiment rules
 
 1. never rewrite a pregame forecast after the game.
 2. never use the provider line to generate the model forecast.
 3. record the decision-time line separately from later line movement.
-4. team rebounds are explanatory/context data only; they are excluded from settled c-reb.
-5. current-season team identity can create a data-driven adjustment, but the model does not receive a manually imposed team bias.
-6. use stable three-letter ids for teams and never reuse an id.
-7. keep missing data as `nr` instead of filling it with hindsight.
-8. after a meaningful sample accumulates, evaluate calibration, residuals, line gaps, and out-of-sample hit rates before changing weights.
+4. calculate settled c-reb as total-row T minus team-row T.
+5. team rebounds are explanatory/context data only; they are excluded from settled c-reb.
+6. current-season team identity can create a data-driven adjustment, but the model does not receive a manually imposed team bias.
+7. use stable three-letter ids for teams and never reuse an id.
+8. keep missing data as `nr` instead of filling it with hindsight.
+9. after the W1-W3 frozen sample, evaluate calibration, residuals, h2h similarity, reboppr-o/d, team-rebound context and line gaps before changing weights.
+10. no model-feature or weight changes are made during the five-day post-Round-3 freeze.
