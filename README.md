@@ -47,7 +47,7 @@ through round 3, 14 games have been entered into the live tracking sample (round
 
 - w2 mean c-reb: 60.8
 - w2 under rate vs recorded provider decision lines: 9/10 (90.0%)
-- w3 mean c-reb: 74.25
+- w3 mean c-reb: 77.5
 - w3 under rate vs recorded provider decision lines: 2/4 (50.0%)
 - combined w2+w3: **11/14 unders (78.6%)**
 - this is an observation, not a validated market-edge estimate; the sample is still very small.
