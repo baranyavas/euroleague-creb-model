@@ -7,10 +7,10 @@ chronological experiment ledger. this file preserves the information available a
 | sample | games | under | over | push | under rate |
 |---|---:|---:|---:|---:|---:|
 | w2 | 10 | 9 | 1 | 0 | 90.0% |
-| w3 | 4 | 1 | 3 | 0 | 25.0% |
-| w2+w3 | 14 | 10 | 4 | 0 | 71.4% |
+| w3 | 4 | 2 | 2 | 0 | 50.0% |
+| w2+w3 | 14 | 11 | 3 | 0 | 78.6% |
 
-**important:** the 14-game sample is 10 unders, not 11. w2 was 9/10 and w3 was 1/4.
+**important:** the 14-game sample is 11 unders, not 10. w2 was 9/10 and w3 is 2/4 after correcting Virtus–Olympiacos settlement to 68 c-reb.
 
 ## registry columns
 
@@ -48,19 +48,19 @@ pregame forecasts below are the rough locked centers used before the games. they
 |---|---:|---|---|---:|---:|---:|---:|---|---|---|---|
 | 2026-10-01 | 3 | Hapoel–Real Madrid | HAP–RMA | 63.5 | 71.5 | -8.0 | 68 | under | under | yes | actual: 68 c-reb; 65 missed fg; reboppr-t 1.046 |
 | 2026-10-01 | 3 | Zvezda–Efes | ZVE–EFE | 65.5 | 71.5 | -6.0 | 89 | over | under | no | actual: 89 c-reb; 84 missed fg; reboppr-t 1.060 |
-| 2026-10-01 | 3 | Virtus–Olympiacos | VIR–OLY | 63.5 | 69.5 | -6.0 | 75 | over | under | no | actual: 75 c-reb; 75 missed fg; reboppr-t 1.000 |
+| 2026-10-01 | 3 | Virtus–Olympiacos | VIR–OLY | 63.5 | 69.5 | -6.0 | 68 | under | under | yes | corrected settlement: 68 c-reb; 75 total rebounds in the source box score; team rebounds excluded from c-reb |
 | 2026-10-01 | 3 | Paris–Zalgiris | PAR–ZAL | 64.5 | 71.5 | -7.0 | 85 | over | under | no | actual: 85 c-reb; 77 missed fg; reboppr-t 1.104 |
 
 ## w3 postgame diagnostic
 
-all four w3 games finished with reboppr-t >= 1.000:
+using the corrected c-reb settlement for Virtus–Olympiacos, w3 finished 2/4 under.
 
 - HAP–RMA: 68 / 65 = 1.046
 - ZVE–EFE: 89 / 84 = 1.060
-- VIR–OLY: 75 / 75 = 1.000
+- VIR–OLY: 68 c-reb; 75 total rebounds, with team rebounds excluded from settlement
 - PAR–ZAL: 85 / 77 = 1.104
 
-this is a useful warning against manually forcing a low-rebound bias. the model should remain direction-neutral and let opportunity, rebound realization, team identity and matchup relationships generate any persistent effect.
+this is a useful warning against manually forcing a low-rebound bias. the tracked w3 games showed elevated rebound realization, but the settlement definition must remain fixed: player-credited orb + player-credited drb, with team rebounds excluded.
 
 ## h2h tracking rule
 
