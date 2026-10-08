@@ -12,7 +12,8 @@ settled c-reb is **total-row T - team-row T**. the bottom total-row O + D must n
 |---|---:|---:|---:|---:|---:|
 | w2 | 10 | 9 | 1 | 0 | 90.0% |
 | w3 | 10 | 7 | 3 | 0 | 70.0% |
-| w2+w3 | 20 | **16** | 4 | 0 | **80.0%** |
+| w4 through 2026-10-08 | 7 | 6 | 1 | 0 | 85.7% |
+| w2+w3+w4 | 27 | **22** | 5 | 0 | **81.5%** |
 
 w3 day 1 was 2/4 under. w3 day 2 was 5/6 under.
 
@@ -51,10 +52,10 @@ pregame forecasts below are the rough locked centers used before the games. they
 
 | date | round | teams | ids | model forecast | line | gap | actual | team rebounds | result | model call | call correct | notes |
 |---|---:|---|---|---:|---:|---:|---:|---:|---|---|---|---|
-| 2026-10-01 | 3 | Hapoel–Real Madrid | HAP–RMA | 63.5 | 71.5 | -8.0 | 68 | 9 | under | under | yes | 65 missed fg; reboppr-t 1.046 |
-| 2026-10-01 | 3 | Zvezda–Efes | ZVE–EFE | 65.5 | 71.5 | -6.0 | 89 | 5 | over | under | no | 84 missed fg; reboppr-t 1.060 |
+| 2026-10-01 | 3 | Hapoel–Real Madrid | HAP–RMA | 63.5 | 71.5 | -8.0 | 59 | 9 | under | under | yes | 65 missed fg; Hapoel 26 + Real 33 c-reb; reboppr-t 0.908 |
+| 2026-10-01 | 3 | Zvezda–Efes | ZVE–EFE | 65.5 | 71.5 | -6.0 | 84 | 5 | over | under | no | 84 missed fg; Zvezda 41 + Efes 43 c-reb; reboppr-t 1.000 |
 | 2026-10-01 | 3 | Virtus–Olympiacos | VIR–OLY | 63.5 | 69.5 | -6.0 | 68 | 7 | under | under | yes | total-row T=75; team-row T=7; settled c-reb=68 |
-| 2026-10-01 | 3 | Paris–Zalgiris | PAR–ZAL | 64.5 | 71.5 | -7.0 | 85 | 13 | over | under | no | 77 missed fg; reboppr-t 1.104 |
+| 2026-10-01 | 3 | Paris–Zalgiris | PAR–ZAL | 64.5 | 71.5 | -7.0 | 72 | 13 | over | under | no | 77 missed fg; Paris 36 + Zalgiris 36 c-reb; reboppr-t 0.935 |
 
 ## round 3 — 2026-10-02
 
@@ -90,6 +91,43 @@ w3 finished **7/10 under**.
 Day 2 model average = 63.83; actual average = 65.33; average residual = +1.50. Provider lines averaged 69.5.
 
 The six day-2 games demonstrate why c-reb must be separated from team rebounds. For example, Besiktas had 40 total-row rebounds but only 1 team rebound, giving 39 c-reb; Barcelona had 34 total-row rebounds and 5 team rebounds, giving 29 c-reb.
+
+
+## round 4 — 2026-10-07 / 2026-10-08
+
+W4 decision-time forecasts were locked before the provider lines were considered. Settled c-reb is always total-row T minus team-row T.
+
+| date | round | teams | ids | model forecast | line | gap | actual | team rebounds | result | model call | call correct | notes |
+|---|---:|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| 2026-10-07 | 4 | Paris–ASVEL | PAR–ASV | 64 | 73.5 | -9.5 | 64 | 8 | under | under | yes | Paris 30 + ASVEL 34 c-reb; box-score total 72 |
+| 2026-10-08 | 4 | Dubai–Zvezda | DUB–ZVE | 68 | 71.5 | -3.5 | 70 | 4 | under | under | yes | Dubai 32 + Zvezda 38 c-reb; box-score total 74; displayed provider result was lost because it appears to have settled total rebounds rather than c-reb |
+| 2026-10-08 | 4 | Maccabi–Milano | MAC–MIL | 63 | 68.5 | -5.5 | 57 | 6 | under | under | yes | Maccabi 25 + Milano 32 c-reb; box-score total 63 |
+| 2026-10-08 | 4 | Bayern–Virtus | BAY–VIR | 63.5 | 69.5 | -6.0 | 66 | 15 | under | under | yes | Bayern 33 + Virtus 33 c-reb; box-score total 81 |
+| 2026-10-08 | 4 | Panathinaikos–Fenerbahce | PAN–FEN | 65.5 | 72.5 | -7.0 | 67 | 1 | under | under | yes | Panathinaikos 34 + Fenerbahce 33 c-reb; box-score total 68 |
+| 2026-10-08 | 4 | Valencia–Hapoel | VAL–HAP | 66.5 | 74.5 | -8.0 | 73 | 8 | under | under | yes | Valencia 35 + Hapoel 38 c-reb; box-score total 81 |
+| 2026-10-08 | 4 | Real Madrid–Partizan | RMA–PTZ | 63 | 68.5 | -5.5 | 72 | 11 | over | under | no | Real 38 + Partizan 34 c-reb; box-score total 83; not used in the combo |
+
+### W4 postgame diagnostic
+
+- Paris–ASVEL: 64 c-reb / 66 missed fg / reboppr-t 0.970
+- Dubai–Zvezda: 70 c-reb / 78 missed fg / reboppr-t 0.897
+- Maccabi–Milano: 57 c-reb / 60 missed fg / reboppr-t 0.950
+- Bayern–Virtus: 66 c-reb / 77 missed fg / reboppr-t 0.857
+- Panathinaikos–Fenerbahce: 67 c-reb / 67 missed fg / reboppr-t 1.000
+- Valencia–Hapoel: 73 c-reb / 75 missed fg / reboppr-t 0.973
+- Real Madrid–Partizan: 72 c-reb / 78 missed fg / reboppr-t 0.923
+
+W4 overall: **6/7 under (85.7%)** against the recorded decision lines. The five selected W4 under bets all settled under on the c-reb target; Paris–ASVEL was also an under, while Real–Partizan was the only over and was not used.
+
+Across W2-W4: **22/27 under (81.5%)**.
+
+The six 2026-10-08 games averaged **64.92 model forecast vs 67.50 actual c-reb**, an average residual of **+2.58**. Provider lines averaged **70.83**, so the market sat about **3.33 rebounds above actual c-reb on average** for the six-game card.
+
+The Real–Partizan miss is diagnostically important. The pregame model ranked it last at about 63 because current c-reb was only 59.3 and the estimated missed-fg opportunity was relatively low (~64). The game actually produced **78 missed fg** and 72 c-reb. Its reboppr-t was 0.923, close to the historical league center, so the main failure was the **opportunity stage (missed-fg volume), not an abnormal rebound-realization rate**. This supports keeping the two-stage structure but flags FGA/FG% forecasting as an area for the W4 review.
+
+For the five selected 2026-10-08 unders, the c-reb outcomes were 70, 57, 66, 67, 73. Their provider lines averaged 71.3.
+
+The first W4 two-leg ticket was displayed as lost by the provider, but the settled c-reb calculations are Dubai–Zvezda 70 (under 71.5) and Maccabi–Milano 57 (under 68.5). The research ledger therefore records both as wins on the c-reb target; the provider settlement should be treated as a settlement-definition discrepancy, not a model loss.
 
 ## h2h tracking rule
 
