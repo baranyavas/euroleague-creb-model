@@ -53,14 +53,15 @@ The historical missed-fg mean is an important baseline because missed shots are 
 
 ## 2026-27 early data
 
-through round 3, **20 games** have been entered into the live tracking sample (round 2: 10 games; round 3: 10 games).
+through round 4, **27 games** have been entered into the live tracking sample (round 2: 10 games; round 3: 10 games; round 4: 7 games).
 
 - w2 mean c-reb: 60.8
 - w2 under rate vs recorded provider decision lines: 9/10 (90.0%)
 - w3 day 1: 2/4 under (50.0%)
 - w3 day 2: **5/6 under (83.3%)**
 - w3 overall: **7/10 under (70.0%)**
-- combined w2+w3: **16/20 unders (80.0%)**
+- w4: **6/7 under (85.7%)**
+- combined w2-w4: **22/27 unders (81.5%)**
 
 This is an observation, not a validated market-edge estimate; the sample is still small.
 
@@ -193,6 +194,48 @@ the workflow is:
 The 2026-10-02 card also reinforced an execution rule: provider lines appeared around one hour before tip, and the decision was made at approximately 20:50 after the relevant lines were available. This timing is an execution observation, not a forecasting feature.
 
 The day-2 card also suggested that **model-to-line gap deserves explicit out-of-sample testing**: the model's largest-gap games were the most attractive candidates on the card, but the sample is too small to conclude that gap magnitude itself is predictive.
+
+
+## round 4 observations
+
+W4 was logged using the fixed settlement rule **c-reb = total-row T - team-row T**.
+
+- Paris–ASVEL: model 64, line 73.5, actual **64 c-reb**, team rebounds 8, under.
+- Dubai–Zvezda: model 68, line 71.5, actual **70 c-reb**, team rebounds 4, under.
+- Maccabi–Milano: model 63, line 68.5, actual **57 c-reb**, team rebounds 6, under.
+- Bayern–Virtus: model 63.5, line 69.5, actual **66 c-reb**, team rebounds 15, under.
+- Panathinaikos–Fenerbahce: model 65.5, line 72.5, actual **67 c-reb**, team rebounds 1, under.
+- Valencia–Hapoel: model 66.5, line 74.5, actual **73 c-reb**, team rebounds 8, under.
+- Real Madrid–Partizan: model 63, line 68.5, actual **72 c-reb**, over; not used in the combo.
+
+The five selected W4 under bets all won on the c-reb target. Real–Partizan was the only over on the seven-game W4 card and was not played.
+
+The six Thursday games averaged **64.92 model vs 67.50 actual**, residual **+2.58**. Provider lines averaged **70.83**, leaving an average market-to-actual gap of **3.33 rebounds**.
+
+### Real–Partizan diagnostic
+
+Real–Partizan was ranked last among the four late games at about 63 c-reb. The main reasons were low current combined c-reb (**59.3**) and a relatively low pregame missed-fg opportunity estimate (~64). The actual game generated **78 missed fg** and 72 c-reb. Its realized REBOPPR-T was **0.923**, close to the historical center, so the miss came mainly from the **opportunity stage** rather than abnormal rebound realization.
+
+This suggests the two-stage structure remains useful, but the W4 review should specifically test whether the opportunity layer is underestimating future FGA / missed-fg volume in high-shot-volume matchups.
+
+### W4 REBOPPR-T
+
+W4 game-level REBOPPR-T values:
+
+- Paris–ASVEL: **0.970**
+- Dubai–Zvezda: **0.897**
+- Maccabi–Milano: **0.950**
+- Bayern–Virtus: **0.857**
+- Panathinaikos–Fenerbahce: **1.000**
+- Valencia–Hapoel: **0.973**
+- Real–Partizan: **0.923**
+
+W4 mean: approximately **0.939**. This is descriptive only; no weight change is made from seven games.
+
+### settlement discrepancy
+
+The first W4 two-leg ticket was displayed as lost by the provider, but its two games settled at **70 and 57 c-reb**, both below their 71.5 and 68.5 decision lines. The research ledger therefore records the ticket as a c-reb win and flags the provider settlement as a market-settlement discrepancy. The box-score total rebounds were 74 and 63 respectively; this reinforces why the research target must remain the explicitly defined c-reb metric.
+
 
 ## decision registry
 
