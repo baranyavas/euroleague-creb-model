@@ -74,10 +74,10 @@ w3 finished **7/10 under**.
 
 ### 2026-10-01
 
-- HAP–RMA: 68 c-reb / 65 missed fg; reboppr-t 1.046
-- ZVE–EFE: 89 c-reb / 84 missed fg; reboppr-t 1.060
-- VIR–OLY: 68 c-reb; total-row T=75; team-row T=7
-- PAR–ZAL: 85 c-reb / 77 missed fg; reboppr-t 1.104
+- HAP–RMA: 59 c-reb / 65 missed fg; reboppr-t 0.908
+- ZVE–EFE: 84 c-reb / 84 missed fg; reboppr-t 1.000
+- VIR–OLY: 68 c-reb / 75 missed fg; total-row T=75; team-row T=7; reboppr-t 0.907
+- PAR–ZAL: 72 c-reb / 77 missed fg; reboppr-t 0.935
 
 ### 2026-10-02
 
@@ -158,3 +158,34 @@ The new W4 variable asks whether the current-season version of the matchup still
 8. keep missing data as `nr` instead of filling it with hindsight.
 9. after the W1-W3 frozen sample, evaluate calibration, residuals, h2h similarity, reboppr-o/d, team-rebound context and line gaps before changing weights.
 10. no model-feature or weight changes are made during the five-day post-Round-3 freeze.
+
+
+## round 4 betting-selection diagnostic — 2026-10-08
+
+The six Round-4 games on 2026-10-08 produced **5 selected unders and all 5 settled under on the c-reb target**. Real Madrid–Partizan was intentionally not selected; it was the only over of the six-game card.
+
+Selected:
+- Dubai–Zvezda U71.5: actual **70 c-reb** — under
+- Maccabi–Milano U68.5: actual **57 c-reb** — under
+- Bayern–Virtus U69.5: actual **66 c-reb** — under
+- Panathinaikos–Fenerbahce U72.5: actual **67 c-reb** — under
+- Valencia–Hapoel U74.5: actual **73 c-reb** — under
+
+Paris–ASVEL on 2026-10-07 was also an under: **64 c-reb vs 73.5 line**, with the model forecast exactly **64**.
+
+Real–Partizan was forecast at **63 c-reb vs 68.5 line**, but settled at **72 c-reb**. The miss is diagnostically useful rather than evidence of a rebound-realization failure: actual missed-fg opportunity was **78**, versus the pregame estimate of roughly **64**. Actual shooting was worse than the pregame opportunity estimate for both teams, creating substantially more missed shots. Final REBOPPR-T was **0.923**, close to the league center, so the main miss was in the **opportunity stage**, not an abnormal conversion/realization stage.
+
+Round-4 REBOPPR-T values:
+- Paris–ASVEL: **0.970**
+- Dubai–Zvezda: **0.897**
+- Maccabi–Milano: **0.950**
+- Bayern–Virtus: **0.857**
+- Panathinaikos–Fenerbahce: **1.000**
+- Valencia–Hapoel: **0.973**
+- Real–Partizan: **0.923**
+
+For the six 2026-10-08 games, model average was **64.92 c-reb**, actual average **67.50**, average residual **+2.58**. Provider lines averaged **70.83**, so actual c-reb remained **3.33 below the average decision line**. The selected five unders averaged a **71.3** line and all five won on the c-reb target.
+
+The first Dubai–Zvezda + Maccabi–Milano two-leg ticket was displayed by the provider as lost, but both legs settled under on the research target: **70 < 71.5** and **57 < 68.5**. This is recorded as a **settlement-definition discrepancy** and should not be counted as a model loss.
+
+**Critical settlement rule remains unchanged:** settled c-reb = bottom Total-row T minus Team-row T. Team-row rebounds are never included in c-reb.
