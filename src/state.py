@@ -164,6 +164,7 @@ def main() -> None:
         "| `src/build.py` | XML → CSV |",
         "| `src/validate.py` | reproduces the published 2025-26 baseline |",
         "| `src/forecast.py` | v0.7 + v0.8 pricing and backtest |",
+        "| `src/slate.py` | pre-line card for a slate (fair number + playable line) |",
         "| `src/report.py` | season report + registry backfill |",
         "| `src/state.py` | this file |",
         "",
