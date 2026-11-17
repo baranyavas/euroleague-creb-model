@@ -26,3 +26,21 @@ Manual adjustments are allowed only as documented context, e.g. roster changes, 
 
 ## Current 2026-27 workflow
 G1/G2 are added as new-season evidence. Historical 2025-26 data remains the base until the rolling/current-season weighting is explicitly changed.
+
+## 2026-11-17 — revival note (v0.7 player-only mode)
+
+Not a new model. One correction, documented here so the record is complete:
+
+- The EuroLeague totals row includes the team-rebound bucket inside O+D. The box
+  score also carries a `Team` pseudo-player row that holds it.
+- `matchup_reboppr_o/d` blended the own rate with the opponent's complement,
+  which forces ORB + DRB = 1.0 and turns the two-stage forecast into
+  "total missed FG". That is the total-rebound world, not the c-reb world.
+- `base_forecast(..., player_only=True)` keeps the settled player-only rates.
+  Pricing uses this mode. The default is unchanged for backward compatibility.
+- Effect, 109 games of 2026-27, rolling pre-game profiles:
+  default blend MAE 8.45 / bias -6.20; player-only MAE 6.81 / bias -0.08.
+- No weights were changed. v0.8 shrinkage, v0.8.2 similarity and the settlement
+  rule are untouched.
+
+Provider lines still never enter the forecast.

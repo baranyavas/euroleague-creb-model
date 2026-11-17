@@ -51,7 +51,7 @@ This settlement rule was re-checked after the 2026-10-02 games. Example: Besikta
 
 The historical missed-fg mean is an important baseline because missed shots are the main opportunity-generation mechanism for c-reb.
 
-## 2026-27 early data
+## 2026-27 early data (W2–W4, while the model was live)
 
 through round 4, **27 games** have been entered into the live tracking sample (round 2: 10 games; round 3: 10 games; round 4: 7 games).
 
@@ -283,3 +283,95 @@ Only after these tests should v0.9 changes be considered.
 - provider lines are recorded after forecasts and never fed backward into the forecast.
 - use stable three-letter team ids and never reuse an id.
 - do not change the model during the frozen W1-W3 evaluation window.
+
+## 2026-27 revival (2026-11-17)
+
+The model was offline from **2026-10-09 to 2026-11-17**. The repo now carries an
+automated pipeline that rebuilds the dataset from the same source the manual
+registry used: the **EuroLeague game center** API.
+
+### data source
+
+| endpoint | use |
+|---|---|
+| `api-live.euroleague.net/v1/results?seasonCode=E2026` | fixtures, dates, final scores |
+| `api-live.euroleague.net/v1/games?seasonCode=E2026&gameCode=N` | one box score |
+
+Raw XML is cached in `data/raw/` (git-ignored, 24 MB). Parsed data is small and
+versioned: `data/processed/games.csv`, `data/processed/team_games.csv`.
+
+The box score carries a pseudo-player called **`Team`** whose `TotalRebounds` is
+the team-rebound row. Settlement therefore reads:
+
+```
+c-reb = total-row T - Team-row T
+```
+
+and the totals row's O+D is **not** usable as a player split (it contains the
+team bucket). The pipeline subtracts it: `oreb_player = O - Team O`,
+`dreb_player = D - Team D`.
+
+### parser regression test
+
+`python -m src.validate` must reproduce the published 2025-26 baseline before any
+forecast is trusted:
+
+| check | rebuilt | README |
+|---|---:|---:|
+| games | 380 | 380 |
+| mean c-reb | 62.00 | 62.01 |
+| sd c-reb | 7.55 | 7.56 |
+| mean missed FG | 67.54 | 67.53 |
+| 70+ share | 14.5% | 14.5% |
+| 80+ share | 1.3% | 1.3% |
+| corr(c-reb, missed FG) | 0.907 | 0.907 |
+| OLS r² | 0.823 | 0.823 |
+| OLS intercept / beta | 3.156 / 0.871 | 3.126 / 0.8719 |
+
+It passes. A failure means the parser is wrong — do not price anything.
+
+### 2026-27 to date (110 games, through round 11)
+
+| metric | 2025-26 | 2026-27 |
+|---|---:|---:|
+| mean c-reb | 62.00 | 63.65 |
+| median | 61 | 64 |
+| sd | 7.55 | 7.95 |
+| mean missed FG | 67.54 | 69.40 |
+| reboppr-t (c-reb / missed FG) | 0.918 | 0.917 |
+| 70+ share | 14.5% | 25.5% |
+| 80+ share | 1.3% | 3.6% |
+| team rebounds per game (context) | 7.42 | 7.76 |
+
+The realization rate is the important stability: **c-reb is ~91.7% of missed
+field goals in both seasons**. The missing ~8% is the team-rebound bucket. A
+forecast that assigns every miss to a player is biased high by ~6 rebounds.
+
+### model note: player-only mode
+
+v0.7's default `matchup_reboppr_o/d` blend uses the complement of the opponent
+rate, which forces ORB + DRB = 1.0 and silently re-adds team rebounds. Pricing
+now calls `base_forecast(..., player_only=True)`, which keeps the settled
+(player-only) rates. The default is unchanged, so every historical note and the
+W2–W4 record keep their original meaning.
+
+Retrospective walk-forward over the 109 games with a pre-game profile
+(`reports/backtest_2026_27.md`): **MAE 6.81, RMSE 8.18, bias −0.08**. This is a
+diagnostic, not a decision record.
+
+### coverage gap
+
+83 games (round 1 and rounds 5–11) have results but **no recorded pregame
+forecast**. They are backfilled in `data/decision_registry.md` as `nr`, per
+experiment rules 2 and 8. They are excluded from every accuracy claim.
+
+### commands
+
+```
+python -m src.update                                   # fetch, build, validate, report, state
+./.venv/bin/python -m src.forecast BAR BJK --line 71.5 # price a matchup
+./.venv/bin/python -m src.forecast --backtest          # retrospective check
+```
+
+Ingest is stdlib-only. The forecast imports `model/` and needs numpy + pandas.
+

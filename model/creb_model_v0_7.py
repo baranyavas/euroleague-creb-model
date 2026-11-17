@@ -149,7 +149,7 @@ def identity_adjusted_c_reb(profile: TeamProfile) -> Optional[float]:
     )
 
 
-def base_forecast(matchup: MatchupInput) -> float:
+def base_forecast(matchup: MatchupInput, player_only: bool = False) -> float:
     """
     Main two-stage forecast.
 
@@ -158,6 +158,12 @@ def base_forecast(matchup: MatchupInput) -> float:
 
     Missing rebound-split inputs fall back to the historical missed-FG OLS
     rather than inventing a team-specific rate.
+
+    player_only=True keeps the rebound rates at their settled (player-only)
+    level. The default blend uses the complement of the opponent rate, which
+    forces ORB+DRB to 1.0 and therefore re-includes the team-rebound bucket
+    that the c-reb settlement rule excludes. Use player_only=True for a
+    forecast on the c-reb scale.
     """
     h, a = matchup.home, matchup.away
 
@@ -170,10 +176,14 @@ def base_forecast(matchup: MatchupInput) -> float:
         h_miss = expected_missed_fg(h.fga, h.fg_pct)
         a_miss = expected_missed_fg(a.fga, a.fg_pct)
 
-        h_o = matchup_reboppr_o(h.reboppr_o, a.reboppr_d)
-        h_d = matchup_reboppr_d(h.reboppr_d, a.reboppr_o)
-        a_o = matchup_reboppr_o(a.reboppr_o, h.reboppr_d)
-        a_d = matchup_reboppr_d(a.reboppr_d, h.reboppr_o)
+        if player_only:
+            h_o, h_d = h.reboppr_o, h.reboppr_d
+            a_o, a_d = a.reboppr_o, a.reboppr_d
+        else:
+            h_o = matchup_reboppr_o(h.reboppr_o, a.reboppr_d)
+            h_d = matchup_reboppr_d(h.reboppr_d, a.reboppr_o)
+            a_o = matchup_reboppr_o(a.reboppr_o, h.reboppr_d)
+            a_d = matchup_reboppr_d(a.reboppr_d, h.reboppr_o)
 
         h_creb = h_miss * h_o + a_miss * h_d
         a_creb = a_miss * a_o + h_miss * a_d
