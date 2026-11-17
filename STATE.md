@@ -56,6 +56,39 @@ Do not add the bottom-row O+D: those include the team-rebound bucket.
 - **Model changes:** only with out-of-sample evidence, documented in
   `data/model_notes.md`.
 
+## Combo (parlay) rule — the 45-minute window
+
+The provider opens a line **60 minutes before that game's own tip-off**,
+so two legs can only share a ticket if both lines are open at the same
+moment.
+
+- **Legs must tip within 45 minutes of the first leg's tip.** Any wider
+  and the later line is not posted yet when the earlier game starts.
+- Sessions are set by the schedule, not chosen. Never combine across
+  them. 2026-11-17 shape: `19:00` / `20:00` / `21:00 x2` /
+  `22:30-23:00 x5`.
+- Never add a live leg to a pregame ticket.
+- If a line is missing at decision time the leg is **dropped, not
+  filled**.
+- Max **2 tickets per night**, max **5 legs**, one settlement (c-reb).
+- Legs inside one session share the night's shooting environment. A
+  high-missed-FG night takes all of them at once; the 5-fold is not
+  five independent bets.
+
+Stake ladder (1u = 1% of bankroll). Total night exposure **<= 3u**.
+
+| ticket | stake |
+|---|---:|
+| single | 1.00u |
+| 2-fold | 0.50u |
+| 3-fold | 0.35u |
+| 4-fold | 0.25u |
+| 5-fold | 0.15u |
+
+`./.venv/bin/python -m src.slate --date YYYY-MM-DD` prints the
+sessions and the combo table; the card lands in
+`reports/card_YYYY-MM-DD.md`.
+
 ## Snapshot
 
 - 2025-26 baseline: 380 games, mean 62.00, median 61, sd 7.55, mean missed FG 67.54, reboppr-t 0.918.
@@ -76,6 +109,7 @@ Do not add the bottom-row O+D: those include the team-rebound bucket.
 
 ```
 python -m src.update                                  # fetch, build, validate, report, state
+./.venv/bin/python -m src.slate --date 2026-11-17      # pre-line card + combo sessions
 ./.venv/bin/python -m src.forecast BAR BJK --line 71.5   # price a matchup
 ./.venv/bin/python -m src.forecast --backtest            # retrospective check
 ```

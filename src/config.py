@@ -23,6 +23,16 @@ BASE_SEASON = "E2025"
 # Regular season only. Results XML also contains play-in / playoffs.
 REGULAR_SEASON_ONLY = True
 
+# Market reference, measured on the 19 recorded 2026-27 forecasts.
+# The provider posts c-reb but posts it high: line - forecast averaged +5.63.
+MARKET_SHADE = 5.63
+MARKET_SHADE_SD = 2.43
+
+# Parlay (combo) rule: legs may only be joined when their tip-offs are within
+# this many minutes of the first leg's tip. A line opens 60 minutes before its
+# own tip, so anything wider than this cannot be bet as one ticket.
+COMBO_WINDOW_MIN = 45
+
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
