@@ -286,7 +286,8 @@ post-game diagnostics are filled in. Nothing here is a decision record.
 | 2026-11-13 | 11 | ASV-BJK | 61 | 9 | 68 | 0.897 | nr |
 | 2026-11-13 | 11 | EFE-VIR | 57 | 9 | 66 | 0.864 | nr |
 | 2026-11-13 | 11 | PAN-BAR | 71 | 6 | 73 | 0.973 | nr |
+| 2026-11-18 | 12 | BJK-RMA | 80 | 10 | 84 | 0.952 | nr |
 
-_83 games backfilled. Live forecasting resumes with `python -m src.forecast`._
+_84 games backfilled. Live forecasting resumes with `python -m src.forecast`._
 
 <!-- AUTO-RESULTS:END -->

@@ -99,12 +99,12 @@ sessions and the combo table; the card lands in
 ## Snapshot
 
 - 2025-26 baseline: 380 games, mean 62.00, median 61, sd 7.55, mean missed FG 67.54, reboppr-t 0.918.
-- 2026-27 to date: 119 games, mean 63.96, median 64, sd 7.99, mean missed FG 69.72, reboppr-t 0.917.
-- Last game in the dataset: 2026-11-17 (round 12), VIR-PAN 72 c-reb.
+- 2026-27 to date: 120 games, mean 64.09, median 64, sd 8.09, mean missed FG 69.84, reboppr-t 0.918.
+- Last game in the dataset: 2026-11-18 (round 12), BJK-RMA 80 c-reb.
 - Recorded decisions: 36 games, 26 under / 7 over against the decision lines.
 - Recorded-forecast residuals (28): mean +2.01, MAE 5.71.
-- Retrospective backtest of the live pipeline: 118 games, MAE 6.75, bias -0.53, RMSE 8.18.
-- Rolling 3-round bias (rounds 10-12): +0.05.
+- Retrospective backtest of the live pipeline: 119 games, MAE 6.79, bias -0.43, RMSE 8.20.
+- Rolling 3-round bias (rounds 10-12): +0.41.
 
 ## Coverage gap
 

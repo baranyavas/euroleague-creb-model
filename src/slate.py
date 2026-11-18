@@ -87,10 +87,29 @@ def expected_line(model: float) -> float:
     return round((model + MARKET_SHADE) * 2) / 2
 
 
+def _up(x: float) -> float:
+    return math.ceil(x * 2) / 2
+
+
+def _down(x: float) -> float:
+    return math.floor(x * 2) / 2
+
+
 def under_prob(line: float, model: float, sd: float) -> float:
     """Normal approximation, with the measured -0.85 forecast bias applied."""
     z = (line - model + MODEL_BIAS) / sd
     return 0.5 * (1 + math.erf(z / math.sqrt(2)))
+
+
+def expected_miss(profile: dict) -> float:
+    return profile["fga"] * (1 - profile["fg_pct"])
+
+
+def game_sd(miss: float, base_sd: float, base_miss: float) -> float:
+    """Residual sd scaled by the game's expected miss volume."""
+    if base_miss <= 0:
+        return base_sd
+    return base_sd * math.sqrt(miss / base_miss)
 
 
 def sessions(slate: list[dict], window: int = config.COMBO_WINDOW_MIN) -> list[list[dict]]:
@@ -168,6 +187,49 @@ def main() -> None:
         "`likely line` = model + 5.6, the provider's usual shade. "
         "`under ≥` = model + 3; `over ≤` = model − 3. "
         "A posted line between the two is a pass.",
+        "",
+        "## Line bands (what to do where the line lands)",
+        "",
+        "| game | model | over ≤ | pass | thin | normal | strong ≥ | exp miss | sd |",
+        "|---|---:|---:|---|---|---|---:|---:|---:|",
+    ]
+
+    live_miss = [
+        int(g["missed_fg_total"]) for g in games.values()
+        if g["season"] == config.LIVE_SEASON and g.get("missed_fg_total")
+    ]
+    base_miss = statistics.mean(live_miss) if live_miss else 69.4
+    for p in priced:
+        miss = expected_miss(p["home_profile"]) + expected_miss(p["away_profile"])
+        p["sd"] = game_sd(miss, sd, base_miss)
+        p["miss"] = miss
+        lines.append(
+            f"| {p['game']} | {p['model']:.1f} | {_down(p['model'] - 3):.1f} "
+            f"| {_down(p['model'] - 3) + 0.5:.1f}–{_up(p['model'] + 3) - 0.5:.1f} "
+            f"| {_up(p['model'] + 3):.1f}–{_up(p['model'] + 5) - 0.5:.1f} "
+            f"| {_up(p['model'] + 5):.1f}–{_up(p['model'] + 7) - 0.5:.1f} "
+            f"| {_up(p['model'] + 7):.1f} | {miss:.0f} | {p['sd']:.2f} |"
+        )
+
+    lines += [
+        "",
+        "| game | thin | likely | strong |",
+        "|---|---|---|---|",
+    ]
+    for p in priced:
+        thin = _up(p["model"] + 3)
+        strong = _up(p["model"] + 7)
+        lines.append(
+            f"| {p['game']} | {thin:.1f} → {100 * under_prob(thin, p['model'], p['sd']):.0f}% "
+            f"| {p['line']:.1f} → {100 * under_prob(p['line'], p['model'], p['sd']):.0f}% "
+            f"| {strong:.1f} → {100 * under_prob(strong, p['model'], p['sd']):.0f}% |"
+        )
+
+    lines += [
+        "",
+        "`thin` = single only, never a combo leg. `normal` = combo leg. "
+        "`strong` = combo leg and a single if wanted. Below `pass` it is a no-bet; "
+        "below `over` the side flips.",
         "",
         "## Combo sessions (45-minute rule)",
         "",
