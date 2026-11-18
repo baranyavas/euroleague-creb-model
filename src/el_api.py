@@ -144,6 +144,14 @@ def _side(club) -> dict:
     oreb = max(0, oreb_total - team_oreb)
     dreb = max(0, dreb_total - team_dreb)
 
+    # 40:00 = regulation, 45:00 = one overtime, 50:00 = two, ...
+    # The model prices a 40-minute game, so overtime is recorded, not modelled.
+    minutes = 0
+    if total is not None:
+        raw_minutes = (total.findtext("TimePlayed") or "").strip()
+        if ":" in raw_minutes:
+            minutes = int(raw_minutes.split(":")[0])
+
     return {
         "code": club.get("code"),
         "name": (club.get("name") or "").strip(),
@@ -165,6 +173,7 @@ def _side(club) -> dict:
         # standard possession estimate (team OREB keeps the possession alive)
         "poss": fga + 0.44 * fta - oreb_total + tov,
         "players": len(real_players),
+        "minutes": minutes,
     }
 
 

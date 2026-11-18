@@ -24,8 +24,9 @@ def load_games() -> list[dict]:
         rows = list(csv.DictReader(fh))
     for r in rows:
         for k in ("creb_total", "team_reb_home", "team_reb_away",
-                  "missed_fg_total", "gameday"):
-            r[k] = int(r[k])
+                  "missed_fg_total", "gameday", "ot"):
+            if k in r:
+                r[k] = int(r[k])
     return rows
 
 
@@ -78,6 +79,32 @@ def write_season_report(games: list[dict]) -> None:
         "so a forecast that assigns every miss to a player is biased high by "
         "the team-rebound bucket.",
         "",
+        "## Overtime (context, not modelled)",
+        "",
+        "The model prices a 40-minute game. Overtime adds possessions and "
+        "missed shots, so it adds c-reb, and it cannot be forecast pregame.",
+        "",
+    ]
+
+    ot = [g for g in live if g.get("ot")]
+    reg = [g for g in live if not g.get("ot")]
+    if ot and reg:
+        lines += [
+            "| | games | share | mean c-reb | 70+ |",
+            "|---|---:|---:|---:|---:|",
+            f"| regulation | {len(reg)} | {100 * len(reg) / len(live):.1f}% "
+            f"| {statistics.mean(g['creb_total'] for g in reg):.2f} "
+            f"| {100 * sum(g['creb_total'] >= 70 for g in reg) / len(reg):.1f}% |",
+            f"| overtime | {len(ot)} | {100 * len(ot) / len(live):.1f}% "
+            f"| {statistics.mean(g['creb_total'] for g in ot):.2f} "
+            f"| {100 * sum(g['creb_total'] >= 70 for g in ot) / len(ot):.1f}% |",
+            "",
+            "An under bet loses to overtime, never to the model being wrong "
+            "about the 40 minutes it was asked to price.",
+            "",
+        ]
+
+    lines += [
         "## Every game",
         "",
         "`team reb` is home+away team rebounds (excluded from c-reb). "
@@ -98,8 +125,9 @@ def write_season_report(games: list[dict]) -> None:
         "",
         "## Recorded decisions vs outcomes",
         "",
-        "Only the W2-W4 rounds were forecast while the model was live. "
-        "`gap = forecast - line`; negative gap means the model was below the market.",
+        "`gap = forecast - line`; negative gap means the model was below the "
+        "market. Rows with `line nr` were locked pregame but the line was not "
+        "captured; they feed the residuals, never the direction record.",
         "",
         "| date | teams | forecast | line | gap | actual | result | call |",
         "|---|---|---:|---:|---:|---:|---|---|",
@@ -114,21 +142,28 @@ def write_season_report(games: list[dict]) -> None:
             continue
         actual = game["creb_total"]
         line = d["line"]
-        result = "under" if actual < line else "over" if actual > line else "push"
+        fc = f"{d['forecast']:.1f}" if d["forecast"] is not None else "nr"
         if d["forecast"] is not None:
-            gap = d["forecast"] - line
-            call = "under" if gap < 0 else "over"
-            ok = "yes" if call == result else "no"
             residuals.append(actual - d["forecast"])
-            fc = f"{d['forecast']:.1f}"
-            gap_txt = f"{gap:+.1f}"
+        if line is None:
+            # Forecast was locked pregame but the line was not captured.
+            # It still counts as a forecast residual, never as a direction.
+            line_txt, gap_txt, result, call, ok = "nr", "nr", "nr", "nr", "nr"
         else:
-            fc, gap_txt, call, ok = "nr", "nr", "nr", "nr"
-        band[result][0] += 1
-        band[result][1] += 1
+            result = "under" if actual < line else "over" if actual > line else "push"
+            band[result][0] += 1
+            band[result][1] += 1
+            line_txt = f"{line:.1f}"
+            if d["forecast"] is not None:
+                gap = d["forecast"] - line
+                call = "under" if gap < 0 else "over"
+                ok = "yes" if call == result else "no"
+                gap_txt = f"{gap:+.1f}"
+            else:
+                gap_txt, call, ok = "nr", "nr", "nr"
         lines.append(
             f"| {d['date']} | {d['team_a']}-{d['team_b']} | {fc} | "
-            f"{line:.1f} | {gap_txt} | {actual} | {result} | {ok} |"
+            f"{line_txt} | {gap_txt} | {actual} | {result} | {ok} |"
         )
 
     n_under, n_over = band["under"][0], band["over"][0]
@@ -175,7 +210,7 @@ def _decisions() -> list[dict]:
         rows = list(csv.DictReader(fh))
     for r in rows:
         r["forecast"] = float(r["forecast"]) if r["forecast"] else None
-        r["line"] = float(r["line"])
+        r["line"] = float(r["line"]) if r["line"] else None
     return rows
 
 

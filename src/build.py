@@ -69,6 +69,7 @@ def build(refresh: bool = False) -> None:
                     "missed_fg_home": home["missed_fg"],
                     "missed_fg_total": miss_total,
                     "poss_total": round(home["poss"] + away["poss"], 1),
+                    "ot": 1 if max(home["minutes"], away["minutes"]) > 40 else 0,
                     "reboppr_t": reboppr_t,
                 }
             )

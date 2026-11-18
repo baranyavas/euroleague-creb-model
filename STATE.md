@@ -39,6 +39,13 @@ Do not add the bottom-row O+D: those include the team-rebound bucket.
   keep them as context, never inside the target.
 - The market has sat above realised c-reb: recorded W2-W4 lines averaged
   ~70 against ~65 realised. Under was 22/27. Small sample, not a law.
+- **Overtime is not modelled and cannot be.** The model prices 40 minutes.
+  7 of 119 games went to OT (5.9%). C-reb in those: 65.86 mean vs 63.84
+  in regulation. A 5-leg ticket therefore has a ~26% chance of containing
+  one OT game; in the bad case it costs 7-10 rebounds.
+- A single round can swing hard without the model drifting: round 11 was
+  -3.17 (model too high), round 12 was +3.41 (model too low). Judge the
+  model on rolling 3-round bias, not on one night.
 
 ## Operating rules
 
@@ -92,15 +99,18 @@ sessions and the combo table; the card lands in
 ## Snapshot
 
 - 2025-26 baseline: 380 games, mean 62.00, median 61, sd 7.55, mean missed FG 67.54, reboppr-t 0.918.
-- 2026-27 to date: 110 games, mean 63.65, median 64, sd 7.95, mean missed FG 69.40, reboppr-t 0.917.
-- Last game in the dataset: 2026-11-13 (round 11), PAN-BAR 71 c-reb.
-- Recorded decisions: 27 games, 22 under / 5 over against the decision lines.
-- Recorded-forecast residuals (19): mean +1.34, MAE 5.82.
-- Retrospective backtest of the live pipeline: 109 games, MAE 6.86, bias -0.85, RMSE 8.26.
+- 2026-27 to date: 119 games, mean 63.96, median 64, sd 7.99, mean missed FG 69.72, reboppr-t 0.917.
+- Last game in the dataset: 2026-11-17 (round 12), VIR-PAN 72 c-reb.
+- Recorded decisions: 36 games, 26 under / 7 over against the decision lines.
+- Recorded-forecast residuals (28): mean +2.01, MAE 5.71.
+- Retrospective backtest of the live pipeline: 118 games, MAE 6.75, bias -0.53, RMSE 8.18.
+- Rolling 3-round bias (rounds 10-12): +0.05.
 
 ## Coverage gap
 
-- The model was offline 2026-10-09 → 2026-11-17.
+- The model was offline 2026-10-09 → 2026-11-16.
+- Round 12 (2026-11-17) is the first round recorded after the gap:
+  9 forecasts, 6 lines captured, 4 under / 2 over.
 - Rounds 1 and 5-11 have results but **no recorded pregame forecast**.
   They are backfilled in `data/decision_registry.md` as `nr` and are
   excluded from every accuracy claim.
@@ -110,6 +120,7 @@ sessions and the combo table; the card lands in
 ```
 python -m src.update                                  # fetch, build, validate, report, state
 ./.venv/bin/python -m src.slate --date 2026-11-17      # pre-line card + combo sessions
+./.venv/bin/python -m src.postgame --date 2026-11-17    # post-game check, recorded forecasts
 ./.venv/bin/python -m src.forecast BAR BJK --line 71.5   # price a matchup
 ./.venv/bin/python -m src.forecast --backtest            # retrospective check
 ```
@@ -133,6 +144,7 @@ and pandas (`.venv`).
 | `src/validate.py` | reproduces the published 2025-26 baseline |
 | `src/forecast.py` | v0.7 + v0.8 pricing and backtest |
 | `src/slate.py` | pre-line card for a slate (fair number + playable line) |
+| `src/postgame.py` | post-game check for a date/round, from recorded forecasts |
 | `src/report.py` | season report + registry backfill |
 | `src/state.py` | this file |
 

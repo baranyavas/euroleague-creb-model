@@ -45,6 +45,8 @@ def main() -> None:
     bt_path = config.REPORTS / "backtest_2026_27.csv"
     bt = _rows(bt_path) if bt_path.exists() else []
     bt_line = "not run"
+    roll_rounds = "n/a"
+    roll_bias = None
     if bt:
         r = [float(x["residual"]) for x in bt]
         bt_line = (
@@ -52,6 +54,13 @@ def main() -> None:
             f"bias {statistics.mean(r):+.2f}, RMSE "
             f"{(sum(v * v for v in r) / len(r)) ** 0.5:.2f}"
         )
+        by_round: dict[int, list[float]] = {}
+        for x in bt:
+            by_round.setdefault(int(x["round"]), []).append(float(x["residual"]))
+        recent = sorted(by_round)[-3:]
+        window = [v for rd in recent for v in by_round[rd]]
+        roll_bias = statistics.mean(window)
+        roll_rounds = f"{recent[0]}-{recent[-1]}"
 
     lines = [
         "# Project state",
@@ -95,6 +104,13 @@ def main() -> None:
         "  keep them as context, never inside the target.",
         "- The market has sat above realised c-reb: recorded W2-W4 lines averaged",
         "  ~70 against ~65 realised. Under was 22/27. Small sample, not a law.",
+        "- **Overtime is not modelled and cannot be.** The model prices 40 minutes.",
+        "  7 of 119 games went to OT (5.9%). C-reb in those: 65.86 mean vs 63.84",
+        "  in regulation. A 5-leg ticket therefore has a ~26% chance of containing",
+        "  one OT game; in the bad case it costs 7-10 rebounds.",
+        "- A single round can swing hard without the model drifting: round 11 was",
+        "  -3.17 (model too high), round 12 was +3.41 (model too low). Judge the",
+        "  model on rolling 3-round bias, not on one night.",
         "",
         "## Operating rules",
         "",
@@ -163,10 +179,14 @@ def main() -> None:
         f"{statistics.mean(abs(v) for v in resid):.2f}." if fc else
         "- Recorded-forecast residuals: none.",
         f"- Retrospective backtest of the live pipeline: {bt_line}.",
+        f"- Rolling 3-round bias (rounds {roll_rounds}): {roll_bias:+.2f}."
+        if roll_bias is not None else "- Rolling 3-round bias: n/a.",
         "",
         "## Coverage gap",
         "",
-        "- The model was offline 2026-10-09 → 2026-11-17.",
+        "- The model was offline 2026-10-09 → 2026-11-16.",
+        "- Round 12 (2026-11-17) is the first round recorded after the gap:",
+        "  9 forecasts, 6 lines captured, 4 under / 2 over.",
         "- Rounds 1 and 5-11 have results but **no recorded pregame forecast**.",
         "  They are backfilled in `data/decision_registry.md` as `nr` and are",
         "  excluded from every accuracy claim.",
@@ -176,6 +196,7 @@ def main() -> None:
         "```",
         "python -m src.update                                  # fetch, build, validate, report, state",
         "./.venv/bin/python -m src.slate --date 2026-11-17      # pre-line card + combo sessions",
+        "./.venv/bin/python -m src.postgame --date 2026-11-17    # post-game check, recorded forecasts",
         "./.venv/bin/python -m src.forecast BAR BJK --line 71.5   # price a matchup",
         "./.venv/bin/python -m src.forecast --backtest            # retrospective check",
         "```",
@@ -199,6 +220,7 @@ def main() -> None:
         "| `src/validate.py` | reproduces the published 2025-26 baseline |",
         "| `src/forecast.py` | v0.7 + v0.8 pricing and backtest |",
         "| `src/slate.py` | pre-line card for a slate (fair number + playable line) |",
+        "| `src/postgame.py` | post-game check for a date/round, from recorded forecasts |",
         "| `src/report.py` | season report + registry backfill |",
         "| `src/state.py` | this file |",
         "",

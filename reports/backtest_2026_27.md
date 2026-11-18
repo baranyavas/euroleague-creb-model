@@ -9,6 +9,7 @@ decision record stays in `data/decision_registry.md`.
 | 1 | 9 | 6.05 | +2.04 | 61.7 | 63.8 |
 | 10 | 10 | 6.73 | +0.25 | 64.9 | 65.2 |
 | 11 | 10 | 5.17 | -3.17 | 65.3 | 62.1 |
+| 12 | 9 | 5.49 | +3.41 | 64.4 | 67.8 |
 | 2 | 10 | 7.86 | -3.84 | 64.4 | 60.6 |
 | 3 | 10 | 7.95 | +5.42 | 62.1 | 67.5 |
 | 4 | 10 | 7.34 | +0.75 | 64.9 | 65.7 |
@@ -18,6 +19,6 @@ decision record stays in `data/decision_registry.md`.
 | 8 | 10 | 6.04 | -1.95 | 65.2 | 63.3 |
 | 9 | 10 | 7.03 | -3.49 | 65.3 | 61.8 |
 
-**All 109 games: MAE 6.86, RMSE 8.26, bias -0.85.**
+**All 118 games: MAE 6.75, RMSE 8.18, bias -0.53.**
 
 Bias > 0 means the model was too low.
