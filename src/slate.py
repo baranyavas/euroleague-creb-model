@@ -113,17 +113,33 @@ def game_sd(miss: float, base_sd: float, base_miss: float) -> float:
 
 
 def sessions(slate: list[dict], window: int = config.COMBO_WINDOW_MIN) -> list[list[dict]]:
-    """Group games whose tip is within `window` minutes of the group's first tip."""
+    """Every maximal window of games that tip within `window` of its first tip.
+
+    A window is a legal ticket: every leg's line opens 60 minutes before its own
+    tip, so the whole ticket can be placed between `last_tip - 60` and the first
+    tip. Overlapping windows are alternatives, not extra tickets.
+    """
     groups: list[list[dict]] = []
-    for g in slate:
-        t = datetime.fromisoformat(g["datetime"])
-        if groups:
-            first = datetime.fromisoformat(groups[-1][0]["datetime"])
-            if (t - first) <= timedelta(minutes=window):
-                groups[-1].append(g)
-                continue
-        groups.append([g])
-    return groups
+    for i, g in enumerate(slate):
+        t0 = datetime.fromisoformat(g["datetime"])
+        grp = [g]
+        for later in slate[i + 1:]:
+            if datetime.fromisoformat(later["datetime"]) - t0 <= timedelta(minutes=window):
+                grp.append(later)
+            else:
+                break
+        if len(grp) >= 2:
+            groups.append(grp)
+
+    out: list[list[dict]] = []
+    for grp in groups:
+        keys = {id(x) for x in grp}
+        if any(keys < {id(x) for x in other} for other in groups):
+            continue  # a subset of a bigger window
+        if any(keys == {id(x) for x in other} for other in out):
+            continue
+        out.append(grp)
+    return out
 
 
 def main() -> None:
@@ -231,20 +247,24 @@ def main() -> None:
         "`strong` = combo leg and a single if wanted. Below `pass` it is a no-bet; "
         "below `over` the side flips.",
         "",
-        "## Combo sessions (45-minute rule)",
+        "## Combo windows (45-minute rule)",
         "",
-        "Legs can only be joined if tips are ≤45 min apart, because each line "
-        "opens 60 min before its own tip. Sessions are separated by a blank line.",
+        "A ticket may only join legs that tip within 45 min of the first leg, "
+        "because each line opens 60 min before its own tip. Overlapping windows "
+        "are **alternatives** (they share legs), not extra tickets.",
         "",
     ]
 
     groups = sessions(slate)
     by_name = {p["game"]: p for p in priced}
+    in_window = {id(g) for grp in groups for g in grp}
+    seen: set[int] = set()
     for i, group in enumerate(groups, 1):
         names = [f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}" for g in group]
         tip = tr_time(group[0]["datetime"])
-        kind = "single" if len(group) == 1 else f"{len(group)} legs"
-        lines.append(f"**S{i} — {tip} ({kind})**")
+        alt = " — alternatif" if seen & {id(g) for g in group} else ""
+        seen |= {id(g) for g in group}
+        lines.append(f"**W{i} — {tip} ({len(group)} legs{alt})**")
         lines.append("")
         for name in names:
             p = by_name[name]
@@ -254,7 +274,15 @@ def main() -> None:
             )
         lines.append("")
 
-    # Combos per session, 2..n legs. Payout 1.85^n, planning P = 0.72^n.
+    singles = [g for g in slate if id(g) not in in_window]
+    if singles:
+        names = [
+            f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}"
+            for g in singles
+        ]
+        lines += [f"Single only (no legal partner): {', '.join(names)}.", ""]
+
+    # Combos per window, 2..n legs. Payout 1.85^n, planning P = 0.72^n.
     lines += [
         "| combo | legs | payout | P(win) | EV per 1u |",
         "|---|---:|---:|---:|---:|",
@@ -265,7 +293,7 @@ def main() -> None:
             payout = ODDS ** n
             prob = LEG_P ** n
             lines.append(
-                f"| S{i} {n}-fold | {', '.join(names[:n])} | {payout:.2f} "
+                f"| W{i} {n}-fold | {', '.join(names[:n])} | {payout:.2f} "
                 f"| {prob:.2f} | {payout * prob - 1:+.2f} |"
             )
 
