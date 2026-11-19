@@ -1,0 +1,7 @@
+bet_id,date,session,kind,legs,odds,stake_usd,unit,result,note
+2026-11-19-S1a,2026-11-19,S1,single,MAC-DUB U69.5,1.80,100,1.00,pending,first session; $100 flat
+2026-11-19-S1b,2026-11-19,S1,single,ZAL-PAN U74.5,1.80,100,1.00,pending,first session; $100 flat
+2026-11-19-S2,2026-11-19,S2,2-fold,MIL-FEN U72.5 + VAL-VIR U76.5,3.49,?,?,pending,stake not stated; VAL was a thin-band leg (single-only rule) and BAY-BAS was missed
+2026-11-17-S1,2026-11-17,S1,single x2,round 12 first two games,1.80,200,2.00,lost,legs to confirm
+2026-11-17-S2a,2026-11-17,S2,3-fold,round 12 second session,6.29,100,1.00,lost,legs to confirm; ladder says 0.35u
+2026-11-17-S2b,2026-11-17,S2,5-fold,round 12 second session,11.60,20,0.20,lost,legs to confirm; ladder says 0.15u
