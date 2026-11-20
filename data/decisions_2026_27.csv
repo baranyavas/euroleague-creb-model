@@ -35,3 +35,9 @@ date,round,team_a,team_b,forecast,line,actual_recorded,result_recorded,source
 2026-11-17,12,BAR,PAR,66.62,72.5,77,over,card_2026-11-17
 2026-11-17,12,PTZ,VAL,68.69,73.5,70,under,card_2026-11-17
 2026-11-17,12,VIR,PAN,67.32,72.5,72,under,card_2026-11-17
+2026-11-19,13,MAC,DUB,64.0,69.5,58,under,card_2026-11-19
+2026-11-19,13,ZAL,PAN,68.6,74.5,63,under,card_2026-11-19
+2026-11-19,13,BAY,BAS,62.6,68.5,67,under,card_2026-11-19
+2026-11-19,13,MIL,FEN,66.2,72.5,62,under,card_2026-11-19
+2026-11-19,13,PAR,HAP,65.5,72.5,60,under,card_2026-11-19
+2026-11-19,13,VAL,VIR,73.3,76.5,89,over,card_2026-11-19
