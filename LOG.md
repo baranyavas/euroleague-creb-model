@@ -2,6 +2,7 @@
 
 One line per session: what was done, what it produced, why.
 
+- 2026-11-21 — logged round 13's second night: 4 games, 4 under, bias −2.40, MAE 3.75, and two of them (BAR-ZVE 173.2 possessions, PTZ-BJK 165.2) went to overtime and still finished under. The 3-fold OLY+BAR+PTZ cleared at every line; EFE-ASV single cleared by 16.5. Backtest 129 games: MAE 6.56, bias −0.01. Added the full 38-round calendar (data/rounds_2026_27.csv, reports/calendar_2026_27.md) from the official feed: the next double week is R17+R18 on 15-18 Dec, no doubles in R14-R16.
 - 2026-11-20 — fixed the v0.7 identity adjustment: it summed both teams' current c-reb against only the baselines that existed, so every BJK game (no 2025-26 row) was inflated by 0.20 x ~30 = +6. Now each team is compared against its own baseline and contributes nothing when it has none. Backtest 125 games: MAE 6.79 -> 6.65, bias -0.42 -> +0.06, RMSE 8.19 -> 8.05; BJK games bias -4.92 -> +0.62. PTZ-BJK tonight moves 70.4 -> 64.6.
 - 2026-11-20 — logged round 13 (6 games, all lines captured): 5 under / 1 over, day bias −0.20, MAE 6.90. VAL-VIR went 89 c-reb on 93 missed FG — both season highs, 99.2nd percentile, the only 89 in 126 games; realisation 0.957 was ordinary (79th pct), so it was volume, not a team-rebound anomaly. The reference 3-fold (BAY-BAS + MIL-FEN + PAR-HAP) would have won all three legs. Added the stake ledger and settled it. No model change.
 
