@@ -19,6 +19,13 @@ REPORT = config.ROOT / "reports" / "bankroll_2026_27.md"
 
 SEASON_START = date(2026, 9, 24)
 
+# Tickets that appeared in the screenshots but are not c-reb markets.
+EXCLUDED = [
+    ("2026-10-15", "Empire", "single",
+     "Real Madrid total points U96.5, 30.00 staked, lost — a points bet that slipped "
+     "into the slips; kept out of the ledger"),
+]
+
 # Limit eras: what the sites let him put on a single ticket.
 ERAS = [
     ("E1 — 20 $ limiti", None, date(2026, 9, 30)),
@@ -179,6 +186,12 @@ def main(write: bool = False) -> None:
     for r in flagged:
         say(f"- `{r['date']}` {r['site']} {r['kind']} — {r['note']}")
     say("")
+    if EXCLUDED:
+        say("## Excluded (screenshots but not c-reb)")
+        say("")
+        for day, site, kind, why in EXCLUDED:
+            say(f"- `{day}` {site} {kind} — {why}")
+        say("")
 
     text = "\n".join(lines)
     print(text)
