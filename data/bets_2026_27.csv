@@ -1,9 +1,57 @@
-bet_id,date,session,kind,legs,odds,stake_usd,unit,result,note
-2026-11-19-S1a,2026-11-19,S1,single,MAC-DUB U69.5,1.80,100,1.00,won,first session; $100 flat
-2026-11-19-S1b,2026-11-19,S1,single,ZAL-PAN U74.5,1.80,100,1.00,won,first session; $100 flat
-2026-11-19-S2,2026-11-19,S2,2-fold,MIL-FEN U72.5 + VAL-VIR U76.5,3.49,?,?,lost,"stake not stated; VAL-VIR U76.5 lost (89 c-reb, season max); BAY-BAS and PAR-HAP both went under"
-2026-11-17-S1,2026-11-17,S1,single x2,round 12 first two games,1.80,200,2.00,lost,legs to confirm
-2026-11-17-S2a,2026-11-17,S2,3-fold,round 12 second session,6.29,100,1.00,lost,legs to confirm; ladder says 0.35u
-2026-11-17-S2b,2026-11-17,S2,5-fold,round 12 second session,11.60,20,0.20,lost,legs to confirm; ladder says 0.15u
-2026-11-20-S1,2026-11-20,S1,single,EFE-ASV U68.5,?,145,1.00,won,odds pending from slip
-2026-11-20-S2,2026-11-20,S2,3-fold,OLY-RMA U71.5 + BAR-ZVE U71.5 + PTZ-BJK U70.5,?,141,0.97,won,odds pending; two legs went to overtime and still cleared
+bet_id,site,date,time,kind,odds,stake_usd,return_usd,result,note
+B01,Empire,2026-09-28,18:34,4-fold,11.704,18.70,0.00,lost,
+B02,Empire,2026-09-29,18:59,3-fold,5.96,19.89,118.56,won,
+B03,Empire,2026-09-30,12:05,2-fold,3.422,19.92,68.18,won,
+B04,Empire,2026-10-01,18:51,single,1.86,26.53,49.35,won,
+B05,Empire,2026-10-01,20:48,3-fold,6.531,35.63,0.00,lost,"OPEN leg ignored, already lost"
+B06,Empire,2026-10-02,19:59,2-fold,3.61,10.00,0.00,lost,
+B07,Empire,2026-10-02,20:50,3-fold,6.331,37.12,235.03,won,
+B08,Empire,2026-10-07,20:53,single,1.9,37.19,70.66,won,
+B09,Empire,2026-10-08,18:56,2-fold,3.686,35.64,131.37,won,stake derived from payout
+B10,Empire,2026-10-08,20:50,3-fold,6.352,35.64,226.40,won,
+B11,Empire,2026-10-09,20:56,2-fold,3.33,68.03,0.00,lost,
+B12,Empire,2026-10-13,,2-fold,3.276,34.70,113.84,won,time cut off
+B13,Empire,2026-10-13,,4-fold,12.078,65.29,788.48,won,time cut off
+B14,Empire,2026-10-14,18:11,single,1.88,66.23,124.51,won,
+B15,Empire,2026-10-14,19:54,single,1.77,58.00,102.66,won,
+B16,Empire,2026-10-14,21:25,single,1.82,71.19,0.00,lost,
+B17,Empire,2026-10-15,20:35,2-fold,3.492,82.44,0.00,lost,
+B18,Empire,2026-10-15,20:35,3-fold,6.053,2.78,16.83,won,
+B19,Empire,2026-10-15,21:04,single,1.8,73.49,132.28,won,
+B20,Empire,2026-10-15,23:15,single,2.9,30.00,0.00,lost,"TEAM total (Real Madrid U56.5), not match total"
+B21,Empire,2026-10-16,18:50,3-fold,4.446,85.52,0.00,lost,MIXED: 2 EL c-reb legs + volleyball Zawiercie
+B22,Empire,2026-10-16,18:50,4-fold,11.743,62.73,736.63,won,"return computed, card cut"
+B23,Empire,2026-10-21,18:10,single,1.82,71.20,0.00,lost,
+B24,Empire,2026-10-22,,4-fold,12.831,63.09,0.00,lost,header cut; 1 team-total leg
+B25,Empire,2026-10-27,21:31,2-fold,3.186,10.87,34.63,won,
+B26,Empire,2026-10-27,21:31,3-fold,6.18,62.08,383.71,won,
+B27,Empire,2026-10-28,20:02,2-fold,3.24,68.69,222.56,won,
+B28,Empire,2026-10-28,21:40,2-fold,3.097,74.72,231.45,won,includes an ASVEL team-total leg
+B29,Empire,2026-10-29,21:51,3-fold,5.925,68.06,403.32,won,
+B30,Empire,2026-10-30,20:09,2-fold,3.433,62.16,0.00,lost,
+B31,Empire,2026-11-04,22:50,single,1.85,69.28,128.17,won,
+B32,Empire,2026-11-05,20:02,2-fold,3.292,68.34,0.00,lost,
+B33,Empire,2026-11-05,21:36,3-fold,6.495,61.69,400.69,won,
+B34,Empire,2026-11-06,19:16,single,1.85,70.39,0.00,lost,
+B35,Duel,2026-11-06,21:51,3-fold,6.053,60.00,363.20,won,
+B36,Duel,2026-11-11,21:55,2-fold,3.515,64.58,227.00,won,
+B37,Duel,2026-11-12,21:45,3-fold,6.026,76.95,463.73,won,
+B38,Empire,2026-11-12,22:01,4-fold,11.3,67.32,760.77,won,
+B39,Empire,2026-11-13,19:38,single,1.9,64.37,122.30,won,
+B40,Duel,2026-11-13,19:44,single,1.9,73.59,139.82,won,
+B41,Empire,2026-11-13,21:58,2-fold,3.198,70.00,0.00,lost,
+B42,Duel,2026-11-13,22:06,2-fold,3.363,72.40,0.00,lost,
+B43,Duel,2026-11-17,20:09,2-fold,3.33,40.00,0.00,lost,
+B44,Duel,2026-11-17,20:12,2-fold,3.33,60.00,0.00,lost,
+B45,Duel,2026-11-17,22:18,3-fold,6.053,50.00,0.00,lost,
+B46,Duel,2026-11-17,22:19,5-fold,21.737,9.04,0.00,lost,
+B47,Duel,2026-11-17,22:21,5-fold,22.924,10.00,0.00,lost,
+B48,Duel,2026-11-17,22:22,3-fold,6.053,49.67,0.00,lost,
+B49,Duel,2026-11-19,20:04,2-fold,3.572,35.00,125.02,won,
+B50,Empire,2026-11-19,20:04,2-fold,3.572,64.02,228.68,won,
+B51,Empire,2026-11-19,22:01,2-fold,3.492,35.98,0.00,lost,
+B52,Duel,2026-11-19,22:02,2-fold,3.492,64.09,0.00,lost,
+B53,Empire,2026-11-20,19:48,single,1.85,67.71,125.26,won,
+B54,Duel,2026-11-20,19:49,single,1.85,77.40,143.19,won,
+B55,Empire,2026-11-20,22:08,3-fold,6.227,66.10,411.61,won,stake derived from payout
+B56,Duel,2026-11-20,22:09,3-fold,6.227,75.56,470.52,won,
