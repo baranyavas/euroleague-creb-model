@@ -15,7 +15,7 @@ B13,Empire,2026-10-13,,4-fold,12.078,65.29,788.48,won,time cut off
 B14,Empire,2026-10-14,18:11,single,1.88,66.23,124.51,won,
 B15,Empire,2026-10-14,19:54,single,1.77,58.00,102.66,won,
 B16,Empire,2026-10-14,21:25,single,1.82,71.19,0.00,lost,
-B17,Empire,2026-10-15,20:35,2-fold,3.492,82.44,0.00,lost,
+B17,Empire,2026-10-15,20:35,2-fold,3.492,62.44,0.00,lost,stake corrected 82.44 -> 62.44 (era-2 limit)
 B18,Empire,2026-10-15,20:35,3-fold,6.053,2.78,16.83,won,
 B19,Empire,2026-10-15,21:04,single,1.8,73.49,132.28,won,
 B20,Empire,2026-10-15,23:15,single,2.9,30.00,0.00,lost,"TEAM total (Real Madrid U56.5), not match total"
