@@ -201,21 +201,20 @@ def base_forecast(matchup: MatchupInput, player_only: bool = False) -> float:
 
     # Generic team-identity adjustment. The weight is intentionally small
     # until enough current-season games exist to validate it out of sample.
-    identity_values = []
+    #
+    # Each team is compared against its own historical baseline. A team with
+    # no previous season has no baseline, so it contributes to neither side of
+    # the comparison. Summing two current identities against one baseline
+    # invents a whole team's worth of rebounds: BJK has no 2025-26 row, and
+    # that inflated every BJK forecast by 0.20 * ~30 = +6.
+    identity_delta = 0.0
     for p in (h, a):
         adj = identity_adjusted_c_reb(p)
-        if adj is not None:
-            identity_values.append(adj)
+        if adj is None or p.historical_c_reb is None:
+            continue
+        identity_delta += adj - p.historical_c_reb
 
-    if identity_values:
-        identity_target = sum(identity_values)
-        baseline_values = [
-            p.historical_c_reb for p in (h, a)
-            if p.historical_c_reb is not None
-        ]
-        if baseline_values:
-            baseline_target = sum(baseline_values)
-            forecast += 0.20 * (identity_target - baseline_target)
+    forecast += 0.20 * identity_delta
 
     # Stable H2H anchor; unstable H2H gets less influence.
     if matchup.h2h_avg is not None:

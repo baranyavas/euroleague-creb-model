@@ -103,8 +103,8 @@ sessions and the combo table; the card lands in
 - Last game in the dataset: 2026-11-19 (round 13), PAR-HAP 60 c-reb.
 - Recorded decisions: 42 games, 31 under / 8 over against the decision lines.
 - Recorded-forecast residuals (34): mean +1.62, MAE 5.92.
-- Retrospective backtest of the live pipeline: 125 games, MAE 6.79, bias -0.42, RMSE 8.19.
-- Rolling 3-round bias (rounds 11-13): +0.33.
+- Retrospective backtest of the live pipeline: 125 games, MAE 6.65, bias +0.06, RMSE 8.05.
+- Rolling 3-round bias (rounds 11-13): +0.76.
 
 ## Coverage gap
 
