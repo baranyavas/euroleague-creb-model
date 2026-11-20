@@ -31,7 +31,7 @@ ERAS = [
     ("E1 — 20 $ limiti", None, date(2026, 9, 30)),
     ("E2 — 35 $ bandı", date(2026, 10, 1), date(2026, 10, 8)),
     ("E3 — 65 $ bandı", date(2026, 10, 9), date(2026, 11, 5)),
-    ("E4 — Duel eklendi (~140 $)", date(2026, 11, 6), None),
+    ("E4 — iki site (65 + 65 $)", date(2026, 11, 6), None),
 ]
 
 
