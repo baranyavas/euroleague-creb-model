@@ -20,8 +20,8 @@ Ledger: `data/bets_2026_27.csv` — 55 tickets, 2026-09-28 → 2026-11-20.
 
 ```
                              n  W/L      staked  returned        net      ROI
-Duel                        15   7/8      818.28  1,932.48  +1,114.20  +136.2%
-Empire                      40  26/14   2,092.73  6,367.93  +4,275.20  +204.3%
+Duel                        14   6/8      758.28  1,569.28    +811.00  +107.0%
+Empire                      41  27/14   2,152.73  6,731.13  +4,578.40  +212.7%
 all                         55  33/22   2,911.01  8,300.41  +5,389.40  +185.1%
 ```
 
@@ -66,8 +66,8 @@ period                      n  median     min     max
 era                          dates                       n med stake     max        net      ROI  per day
 E1 — 20 $ limiti             2026-09-28 .. 2026-09-30    3      19.9   19.92    +128.23  +219.2%   +42.74
 E2 — 35 $ bandı              2026-10-01 .. 2026-10-08    7      35.6   37.19    +495.06  +227.4%   +61.88
-E3 — 65 $ bandı              2026-10-09 .. 2026-11-05   22      65.5   74.72  +2,509.18  +191.5%   +89.61
-E4 — iki site (65 + 65 $)    2026-11-06 .. 2026-11-20   23      64.4   77.40  +2,256.93  +170.4%  +150.46
+E3 — 65 $ bandı              2026-10-09 .. 2026-11-06   24      65.5   74.72  +2,741.99  +190.3%   +94.55
+E4 — iki site (65 + 65 $)    2026-11-11 .. 2026-11-20   21      64.4   77.40  +2,024.12  +169.6%  +202.41
 ```
 
 ## Flagged rows
@@ -81,6 +81,7 @@ E4 — iki site (65 + 65 $)    2026-11-06 .. 2026-11-20   23      64.4   77.40  
 - `2026-10-16` Empire 4-fold — return computed, card cut
 - `2026-10-22` Empire 4-fold — header cut; 1 team-total leg
 - `2026-10-28` Empire 2-fold — includes an ASVEL team-total leg
+- `2026-11-06` Empire 3-fold — relabelled Duel->Empire; Duel's first ticket is 11 Nov
 - `2026-11-20` Empire 3-fold — stake derived from payout
 
 ## Excluded (screenshots but not c-reb)

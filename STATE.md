@@ -15,8 +15,10 @@ Forecast a matchup with: ./.venv/bin/python -m src.forecast HOME AWAY --line X
 
 1. This file.
 2. `reports/season_2026_27.md` — every 2026-27 game and the recorded decisions.
-3. `data/decision_registry.md` — the chronological decision ledger.
-4. `README.md` — model, findings, limitations.
+3. `reports/bankroll_2026_27.md` — what was actually staked and returned.
+4. `reports/four_leg_nights_2026_27.md` — upcoming legal 4-fold nights.
+5. `data/decision_registry.md` — the chronological decision ledger.
+6. `README.md` — model, findings, limitations.
 
 ## What we are doing
 
@@ -82,7 +84,32 @@ moment.
   high-missed-FG night takes all of them at once; the 5-fold is not
   five independent bets.
 
-Stake ladder (1u = 1% of bankroll). Total night exposure **<= 3u**.
+## Money — the rule the user actually follows
+
+- **Flat stake, not a ladder.** Every ticket gets the same amount
+  regardless of leg count: **65 $ on Empire + 65 $ on Duel** per night.
+  The ladder below was proposed and **rejected by the user
+  (2026-11-21)**; do not apply it and do not re-propose it.
+- **Four-leg tickets whenever the schedule allows four legs inside one
+  45-minute window.** The user's words: "4 maç oynatabildiği sürece
+  onları oynamaya devam edeceğim." Check the schedule for 4-leg nights
+  first; fall back to 3-, 2- or 1-leg tickets only when no window holds
+  four games.
+- **Two sessions per night:** the first session is at most a 2-fold, the
+  second at most a 3-fold (a 4-fold rides whichever window can hold it).
+- **Max 2 tickets per night**, one settlement (c-reb). No stake-size
+  warnings — the user does not want them.
+- **Ledger of record:** `data/bets_2026_27.csv` (site, date, time, kind,
+  odds, stake, return, result, note). P&L comes from stake/return, never
+  from odds. Report: `./.venv/bin/python -m src.bankroll --write`.
+- **Two sites, split by the slip:** cards marked "Duel" are Duel
+  (first ticket 2026-11-11); the CSGOEMPIRE-stamped cards are Empire
+  (first ticket 2026-09-28).
+- **Not c-reb, kept out of the ledger:** match-total points bets. One such
+  slip (2026-10-15, Real Madrid total points U96.5) is listed under
+  `EXCLUDED` in `src/bankroll.py`.
+
+Rejected ladder, kept only for the record (1u = 1 % of bankroll):
 
 | ticket | stake |
 |---|---:|
@@ -119,10 +146,12 @@ sessions and the combo table; the card lands in
 
 ```
 python -m src.update                                  # fetch, build, validate, report, state
+./.venv/bin/python -m src.nights                       # which nights can hold a 4-fold
 ./.venv/bin/python -m src.slate --date 2026-11-17      # pre-line card + combo sessions
 ./.venv/bin/python -m src.postgame --date 2026-11-17    # post-game check, recorded forecasts
 ./.venv/bin/python -m src.forecast BAR BJK --line 71.5   # price a matchup
 ./.venv/bin/python -m src.forecast --backtest            # retrospective check
+./.venv/bin/python -m src.bankroll --write               # P&L ledger + weekly/era report
 ```
 
 Ingest is stdlib-only. The forecast imports `model/`, which needs numpy
@@ -138,13 +167,19 @@ and pandas (`.venv`).
 | `data/decisions_2026_27.csv` | the recorded forecasts and lines, machine-readable |
 | `data/processed/games.csv` | one row per game |
 | `data/processed/team_games.csv` | one row per team-game |
+| `data/bets_2026_27.csv` | the money ledger: every ticket, stake and return |
 | `reports/season_2026_27.md` | season report, every game |
 | `reports/backtest_2026_27.md` | retrospective model check |
+| `reports/bankroll_2026_27.md` | P&L: sites, ticket types, weeks, limit eras |
+| `reports/four_leg_nights_2026_27.md` | nights where a 4-fold is legal |
 | `src/build.py` | XML → CSV |
 | `src/validate.py` | reproduces the published 2025-26 baseline |
 | `src/forecast.py` | v0.7 + v0.8 pricing and backtest |
 | `src/slate.py` | pre-line card for a slate (fair number + playable line) |
 | `src/postgame.py` | post-game check for a date/round, from recorded forecasts |
+| `src/bets.py` | ticket-by-ticket P&L printout |
+| `src/bankroll.py` | P&L aggregates + report writer |
+| `src/nights.py` | 4-leg-night calendar from the official schedule |
 | `src/report.py` | season report + registry backfill |
 | `src/state.py` | this file |
 
@@ -157,11 +192,17 @@ and pandas (`.venv`).
 
 ## Open threads
 
-- Resume live forecasts when the provider posts round-12 lines. The
-  first decision after the gap should be logged with its timestamp.
-- The 2026-27 sample is 110 games. Do not change weights on it.
-- Line-gap tracking: the market's under bias held through W4 (22/27).
+- Next match night: **round 14, 24-25 Nov**. Both nights are 3-leg
+  windows; no 4-fold is legal there. The first 4-fold night is
+  **15 Dec (round 17, six games inside 45 minutes)**.
+- Three slip numbers are still the agent's read rather than confirmed by
+  the user: 2026-10-08 stake 35.64, 2026-11-20 Empire stake 66.10,
+  2026-10-16 4-fold return 736.63. Ask before changing the totals.
+- The 2026-27 sample is 130 games. Do not change weights on it.
+- Line-gap tracking: the market's under bias held through round 13.
   Re-test it on the next recorded slate before trusting it.
 - Reboppr-o / reboppr-d are now player-only. The old registry notes
   quoted team-inclusive splits; do not mix the two scales.
+- 2026-27 record to beat: 55 tickets, 2,911.01 staked, net +5,389.40,
+  ROI +185.1%, 27 betting days, 54 calendar days.
 
