@@ -172,6 +172,7 @@ and pandas (`.venv`).
 | `reports/backtest_2026_27.md` | retrospective model check |
 | `reports/bankroll_2026_27.md` | P&L: sites, ticket types, weeks, limit eras |
 | `reports/four_leg_nights_2026_27.md` | nights where a 4-fold is legal |
+| `reports/team_codes.md` | the three-letter codes the cards print |
 | `src/build.py` | XML → CSV |
 | `src/validate.py` | reproduces the published 2025-26 baseline |
 | `src/forecast.py` | v0.7 + v0.8 pricing and backtest |

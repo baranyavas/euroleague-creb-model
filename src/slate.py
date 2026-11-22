@@ -260,16 +260,22 @@ def main() -> None:
     in_window = {id(g) for grp in groups for g in grp}
     seen: set[int] = set()
     for i, group in enumerate(groups, 1):
-        names = [f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}" for g in group]
+        pairs = [
+            (
+                f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}",
+                config.label(g["home"]["code"], g["away"]["code"]),
+            )
+            for g in group
+        ]
         tip = tr_time(group[0]["datetime"])
         alt = " — alternatif" if seen & {id(g) for g in group} else ""
         seen |= {id(g) for g in group}
         lines.append(f"**W{i} — {tip} ({len(group)} legs{alt})**")
         lines.append("")
-        for name in names:
-            p = by_name[name]
+        for key, show in pairs:
+            p = by_name[key]
             lines.append(
-                f"- {name}: model {p['model']:.1f}, likely line {p['line']:.1f}, "
+                f"- **{show}**: model {p['model']:.1f}, likely line {p['line']:.1f}, "
                 f"under ≥ {p['model'] + EDGE_PLAY:.1f}"
             )
         lines.append("")
@@ -277,8 +283,7 @@ def main() -> None:
     singles = [g for g in slate if id(g) not in in_window]
     if singles:
         names = [
-            f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}"
-            for g in singles
+            config.label(g["home"]["code"], g["away"]["code"]) for g in singles
         ]
         lines += [f"Single only (no legal partner): {', '.join(names)}.", ""]
 
@@ -288,7 +293,9 @@ def main() -> None:
         "|---|---:|---:|---:|---:|",
     ]
     for i, group in enumerate(groups, 1):
-        names = [f"{config.club_id(g['home']['code'])}-{config.club_id(g['away']['code'])}" for g in group]
+        names = [
+            config.label(g["home"]["code"], g["away"]["code"]) for g in group
+        ]
         for n in range(2, len(names) + 1):
             payout = ODDS ** n
             prob = LEG_P ** n
@@ -320,7 +327,7 @@ def main() -> None:
                 continue
             seen.add(team)
             lines.append(
-                f"| {team} | {prof['current_games']} | {prof['fga']:.1f} "
+                f"| {config.short(team)} | {prof['current_games']} | {prof['fga']:.1f} "
                 f"| {100 * prof['fg_pct']:.1f} | {prof['reboppr_o']:.3f} "
                 f"| {prof['reboppr_d']:.3f} |"
             )

@@ -63,3 +63,61 @@ CLUB_ID = {
 
 def club_id(code: str) -> str:
     return CLUB_ID.get(code, code)
+
+
+# --------------------------------------------------------------------------
+# display codes (reading only — every CSV keeps the registry ids above)
+# --------------------------------------------------------------------------
+
+# The user asked (2026-11-22) for the three-letter codes he actually uses.
+# Both the API codes and the registry ids map onto the same display code, so
+# `short()` accepts either. Files are untouched: `decision_registry.md`,
+# `decisions_2026_27.csv` and the forecast CLI keep the registry ids.
+TEAM_NAME = {
+    "BAR": "Barcelona",
+    "OLY": "Olympiacos",
+    "FEN": "Fenerbahçe",
+    "EFE": "Anadolu Efes",
+    "RMA": "Real Madrid",
+    "BAY": "Bayern München",
+    "MCO": "Monaco",
+    "PRS": "Paris",
+    "PRT": "Partizan",
+    "CZV": "Crvena zvezda",
+    "MAC": "Maccabi Tel Aviv",
+    "BJK": "Beşiktaş",
+    "HAP": "Hapoel Tel Aviv",
+    "VAL": "Valencia",
+    "PAN": "Panathinaikos",
+    "ASV": "ASVEL",
+    "MIL": "Olimpia Milano",
+    "BAS": "Baskonia",
+    "VIR": "Virtus Bologna",
+    "DUB": "Dubai",
+}
+
+DISPLAY = {
+    # API code -> display code
+    "ULK": "FEN",
+    "IST": "EFE",
+    "MAD": "RMA",
+    "MUN": "BAY",
+    "PRS": "PRS",
+    "PAR": "PRT",
+    "RED": "CZV",
+    "TEL": "MAC",
+    "BES": "BJK",
+    "HTA": "HAP",
+    "PAM": "VAL",
+    "ZVE": "CZV",
+    "PTZ": "PRT",
+}
+
+
+def short(code: str) -> str:
+    """Readable three-letter code for either an API code or a registry id."""
+    return DISPLAY.get(code, code)
+
+
+def label(home: str, away: str) -> str:
+    return f"{short(home)}-{short(away)}"

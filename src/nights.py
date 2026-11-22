@@ -137,7 +137,7 @@ def max_legs(sub: list[dict], window: int = config.COMBO_WINDOW_MIN) -> int:
 
 
 def _fmt(g: dict) -> str:
-    return f"{g['utc']:%H:%M}Z {g['home']}-{g['away']}"
+    return f"{g['utc']:%H:%M}Z {config.label(g['home'], g['away'])}"
 
 
 def main(
@@ -187,7 +187,7 @@ def main(
         say(
             f"{day} {rnd:>3} {n:>4}  {stamp} "
             + (win[0]["utc"].strftime("%H:%M") + "Z: " if win else "")
-            + ", ".join(f"{g['home']}-{g['away']}" for g in win)
+            + ", ".join(config.label(g['home'], g['away']) for g in win)
         )
         if n >= 4:
             four.append((day, win))
@@ -209,7 +209,7 @@ def main(
             say(f"### {day} — round {win[0]['round']}")
             say("")
             for g in win:
-                say(f"- `{g['utc']:%H:%M}Z` {g['home']} vs {g['away']}")
+                say(f"- `{g['utc']:%H:%M}Z` {config.short(g['home'])} vs {config.short(g['away'])}")
             say("")
             say(f"Window: {win[0]['utc']:%H:%M}Z – {win[-1]['utc']:%H:%M}Z "
                 f"({int((win[-1]['utc'] - win[0]['utc']).total_seconds() // 60)} min)")
