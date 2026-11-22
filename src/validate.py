@@ -111,7 +111,20 @@ def main() -> int:
     if bad:
         print("  broken rows:", len(bad))
 
-    ok = all(results) and not bad
+    # One canonical code scheme: processed data must hold canonical ids only.
+    # An API code that still maps somewhere (PAR -> PRT) means the edge
+    # conversion was skipped, and PAR would silently read as Paris.
+    with (config.DATA_PROC / "team_games.csv").open(newline="", encoding="utf-8") as fh:
+        ids = {r["team_id"] for r in csv.DictReader(fh)} | {
+            r["opp_id"] for r in csv.DictReader(fh)
+        }
+    unknown = sorted(i for i in ids if i not in config.TEAM_NAME)
+    leaked = sorted(i for i in ids if config.club_id(i) != i)
+    print(f"\nteam codes: {len(ids)} ids, unknown {unknown or 'none'}, "
+          f"api codes leaked {leaked or 'none'}")
+    codes_ok = not unknown and not leaked
+
+    ok = all(results) and not bad and codes_ok
     print("\nBASELINE REPRODUCED" if ok else "\nBASELINE MISMATCH — do not trust the parser")
     return 0 if ok else 1
 

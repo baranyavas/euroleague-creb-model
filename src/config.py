@@ -38,41 +38,34 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
 )
 
-# Registry ids used in data/decision_registry.md, keyed by the club code in
-# the results XML. Most official codes already match; these differ.
-#   PRS = Paris Basketball   -> PAR (the registry's Paris id)
-#   PAR = Partizan Belgrade  -> PTZ
-#   RED = Crvena Zvezda      -> ZVE
-#   TEL = Maccabi Tel Aviv   -> MAC
-#   BES = Besiktas           -> BJK
+# One canonical id scheme, everywhere: data files, model, cards, CLI.
+# The EuroLeague API speaks different codes for eleven clubs, so `club_id`
+# converts them **at the edge** (build, slate, nights). Nothing else should
+# ever see an API code.
+#
+# The old two-scheme setup is gone. It made `PAR` mean Partizan in the API and
+# Paris in the registry, which is exactly the kind of trap that silently prices
+# the wrong game. Paris is PRS and Partizan is PRT in every file now.
 CLUB_ID = {
-    "IST": "EFE",
-    "MAD": "RMA",
-    "HTA": "HAP",
-    "PAM": "VAL",
-    "ULK": "FEN",
-    "MUN": "BAY",
-    "PRS": "PAR",
-    "PAR": "PTZ",
-    "RED": "ZVE",
-    "TEL": "MAC",
-    "BES": "BJK",
+    "IST": "EFE",   # Anadolu Efes
+    "MAD": "RMA",   # Real Madrid
+    "HTA": "HAP",   # Hapoel Tel Aviv
+    "PAM": "VAL",   # Valencia (API says Pamesa)
+    "ULK": "FEN",   # Fenerbahce (Ulker)
+    "MUN": "BAY",   # Bayern Munich
+    "PAR": "PRT",   # Partizan — the API's PAR is NOT Paris
+    "RED": "CZV",   # Crvena zvezda
+    "TEL": "MAC",   # Maccabi Tel Aviv
+    "BES": "BJK",   # Besiktas
     "MCO": "MCO",
 }
 
 
 def club_id(code: str) -> str:
+    """API code -> canonical id. A canonical id passes through unchanged."""
     return CLUB_ID.get(code, code)
 
 
-# --------------------------------------------------------------------------
-# display codes (reading only — every CSV keeps the registry ids above)
-# --------------------------------------------------------------------------
-
-# The user asked (2026-11-22) for the three-letter codes he actually uses.
-# Both the API codes and the registry ids map onto the same display code, so
-# `short()` accepts either. Files are untouched: `decision_registry.md`,
-# `decisions_2026_27.csv` and the forecast CLI keep the registry ids.
 TEAM_NAME = {
     "BAR": "Barcelona",
     "OLY": "Olympiacos",
@@ -94,29 +87,13 @@ TEAM_NAME = {
     "BAS": "Baskonia",
     "VIR": "Virtus Bologna",
     "DUB": "Dubai",
-}
-
-DISPLAY = {
-    # API code -> display code
-    "ULK": "FEN",
-    "IST": "EFE",
-    "MAD": "RMA",
-    "MUN": "BAY",
-    "PRS": "PRS",
-    "PAR": "PRT",
-    "RED": "CZV",
-    "TEL": "MAC",
-    "BES": "BJK",
-    "HTA": "HAP",
-    "PAM": "VAL",
-    "ZVE": "CZV",
-    "PTZ": "PRT",
+    "ZAL": "Žalgiris Kaunas",
 }
 
 
 def short(code: str) -> str:
-    """Readable three-letter code for either an API code or a registry id."""
-    return DISPLAY.get(code, code)
+    """Canonical code, accepting either an API code or a canonical id."""
+    return club_id(code)
 
 
 def label(home: str, away: str) -> str:
