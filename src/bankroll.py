@@ -65,7 +65,9 @@ HEAD = f"{'':26} {'n':>3}  {'W/L':<5} {'staked':>9} {'returned':>9} {'net':>10} 
 
 
 def main(write: bool = False) -> None:
-    data = rows()
+    all_rows = rows()
+    open_rows = [r for r in all_rows if r["result"] == "open"]
+    data = [r for r in all_rows if r["result"] != "open"]
     staked, ret, net = totals(data)
     first = date.fromisoformat(data[0]["date"])
     last = date.fromisoformat(data[-1]["date"])
@@ -77,12 +79,16 @@ def main(write: bool = False) -> None:
 
     say("# Bankroll — 2026-27")
     say("")
-    say(f"Ledger: `data/bets_2026_27.csv` — {len(data)} tickets, "
-        f"{data[0]['date']} → {data[-1]['date']}.")
+    say(f"Ledger: `data/bets_2026_27.csv` — {len(all_rows)} tickets, "
+        f"{all_rows[0]['date']} → {all_rows[-1]['date']}.")
+    say("")
+    say("Open tickets are excluded from every total below; they are listed at")
+    say("the end with their stake and what they would return.")
     say("")
     say("| | |")
     say("|---|---:|")
-    say(f"| tickets | **{len(data)}** |")
+    say(f"| tickets | **{len(data)}** settled"
+        + (f" + {len(open_rows)} open" if open_rows else "") + " |")
     say(f"| won / lost | {sum(1 for r in data if r['result']=='won')} / "
         f"{sum(1 for r in data if r['result']!='won')} |")
     say(f"| staked | **{staked:,.2f}** |")
@@ -191,6 +197,24 @@ def main(write: bool = False) -> None:
         say("")
         for day, site, kind, why in EXCLUDED:
             say(f"- `{day}` {site} {kind} — {why}")
+        say("")
+
+    if open_rows:
+        say("## Open tickets (not in the totals yet)")
+        say("")
+        say("```")
+        say(f"{'id':4} {'date':11} {'site':7} {'kind':7} {'odds':>6} {'stake':>7} {'if won':>8}")
+        for r in open_rows:
+            stake = float(r["stake_usd"])
+            odds = float(r["odds"])
+            say(f"{r['bet_id']:4} {r['date']} {r['site']:7} {r['kind']:7} "
+                f"{odds:>6.3f} {stake:>7.2f} {stake * odds:>8.2f}")
+        say("```")
+        say("")
+        say(f"Open stake {sum(float(r['stake_usd']) for r in open_rows):,.2f}; "
+            f"if every leg wins "
+            f"{sum(float(r['stake_usd']) * float(r['odds']) for r in open_rows):,.2f} "
+            "comes back.")
         say("")
 
     text = "\n".join(lines)

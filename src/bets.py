@@ -40,10 +40,12 @@ def _line(label: str, data: list[dict]) -> str:
 
 
 def main() -> None:
-    data = rows()
+    all_rows = rows()
+    data = [r for r in all_rows if r["result"] != "open"]
+    open_rows = [r for r in all_rows if r["result"] == "open"]
 
     print("date        time   site    kind      odds   stake  returned      net")
-    for r in data:
+    for r in all_rows:
         stake = float(r["stake_usd"])
         ret = float(r["return_usd"])
         print(
@@ -74,6 +76,14 @@ def main() -> None:
             f"  {day}  n{len(sub):>2}  staked {_sum(sub, 'stake_usd'):7,.2f}  "
             f"net {net:+8,.2f}   cumulative {running:+9,.2f}"
         )
+
+    if open_rows:
+        print("\nopen (not in the totals):")
+        for r in open_rows:
+            stake = float(r["stake_usd"])
+            odds = float(r["odds"])
+            print(f"  {r['bet_id']} {r['date']} {r['site']:6} {r['kind']:7} "
+                  f"{odds:6.3f} stake {stake:7.2f} -> if won {stake*odds:8.2f}")
 
     flagged = [r for r in data if r["note"]]
     if flagged:

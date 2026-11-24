@@ -1,10 +1,13 @@
 # Bankroll — 2026-27
 
-Ledger: `data/bets_2026_27.csv` — 55 tickets, 2026-09-28 → 2026-11-20.
+Ledger: `data/bets_2026_27.csv` — 58 tickets, 2026-09-28 → 2026-11-24.
+
+Open tickets are excluded from every total below; they are listed at
+the end with their stake and what they would return.
 
 | | |
 |---|---:|
-| tickets | **55** |
+| tickets | **55** settled + 3 open |
 | won / lost | 33 / 22 |
 | staked | **2,911.01** |
 | returned | **8,300.41** |
@@ -87,3 +90,14 @@ E4 — iki site (65 + 65 $)    2026-11-11 .. 2026-11-20   21      64.4   77.40  
 ## Excluded (screenshots but not c-reb)
 
 - `2026-10-15` Empire single — Real Madrid total points U96.5, 30.00 staked, lost — a points bet that slipped into the slips; kept out of the ledger
+
+## Open tickets (not in the totals yet)
+
+```
+id   date        site    kind      odds   stake   if won
+B59  2026-11-24 Empire  3-fold   5.952   24.90   148.20
+B57  2026-11-24 Duel    3-fold   5.952   72.00   428.54
+B58  2026-11-24 Duel    2-fold   3.132   13.00    40.72
+```
+
+Open stake 109.90; if every leg wins 617.46 comes back.
