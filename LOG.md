@@ -2,6 +2,8 @@
 
 One line per session: what was done, what it produced, why.
 
+- 2026-11-25 — logged B60: the Dubai-Partizan under 70.5 was taken at 90 and lost by 0.5 (71, nine rebounds in the last two minutes). The line was the best of the week on paper (+7.98 over a 62.52 model), so the bet was right and the result was variance — not a reason to touch the model. Site and price still missing; 25 Nov lines recorded in `decisions_2026_27.csv` before tip-off (OLY-HAP 70.5, BAS-EFE 70.5, RMA-ZAL 72.5).
+
 - 2026-11-25 — settled R14 night one: all three unders cleared (BAY-MAC 62 vs 68.5, VAL-PAN 60 vs 75.5, ASV-MIL 56 vs 65.5), so the Duel 72 + 13 and Empire 24.90 all won: 109.90 staked, 617.53 back, +507.63. Day bias −3.28, MAE 3.60; the model's worst read (VAL-PAN, −10.26) still cleared by 15.5. All three skipped games went under too (BJK-PRS 68 vs 72.5, BAR-FEN 62 vs 72). Running: 58 tickets, +5,897.03, ROI +195.2%.
 
 - 2026-11-24 — logged R14 night one: the window-A 3-fold (BAY-MAC U68.5, VAL-PAN U75.5, ASV-MIL U65.5) at Duel 72 and Empire 24.90, plus a Duel 2-fold of the first two legs for 13 because the 1.90 leg's max-profit allowance was used. **Empire capped this ticket at 25** — the first time it has sat below the 65-70 band, so watch whether it is a one-off, a per-combo cap or a general cut. Open tickets are now kept out of every P&L total and listed separately.

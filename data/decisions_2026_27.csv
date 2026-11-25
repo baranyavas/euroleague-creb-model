@@ -45,3 +45,7 @@ date,round,team_a,team_b,forecast,line,actual_recorded,result_recorded,source
 2026-11-20,13,OLY,RMA,63.7,71.5,66,under,card_2026-11-20
 2026-11-20,13,BAR,CZV,66.4,71.5,60,under,card_2026-11-20
 2026-11-20,13,PRT,BJK,64.6,70.5,65,under,card_2026-11-20
+2026-11-25,14,DUB,PRT,62.52,70.5,71,over,card_2026-11-25
+2026-11-25,14,OLY,HAP,61.58,70.5,,,card_2026-11-25
+2026-11-25,14,BAS,EFE,64.93,70.5,,,card_2026-11-25
+2026-11-25,14,RMA,ZAL,70.11,72.5,,,card_2026-11-25
