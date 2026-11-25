@@ -1,5 +1,10 @@
 # Match notes — 25 November 2026 (R14, second night)
 
+**Plan change:** the user passed on the DUB-PRT single. The night is one ticket
+in the late window (OLY-HAP + BAS-EFE + RMA-ZAL), 3-fold if all three clear
+model + 5, otherwise the 2-fold of whoever does. The Dubai analysis below is
+kept for the record, not as a live bet.
+
 Model numbers are the pregame forecasts; "expected line" is model + 5.63, the
 measured shade. League context for 2026-27: **64.0 c-reb**, 69.9 missed FG,
 151.5 total possessions per game.
@@ -27,6 +32,7 @@ with what this opponent concedes, so it is not just a raw average.
 **Expectation:** a 63-66 game, most likely 64-65. Under needs the total to
 stay below the line by 3-5, which is the normal shade, not a gift. This is
 the thinnest of the week — play it at 66 or above, comfortable at 68.
+**Passed anyway: no single, the night is the late window only.**
 
 ## 22:15 — OLY-HAP
 
