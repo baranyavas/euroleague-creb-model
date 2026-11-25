@@ -54,6 +54,6 @@ B53,Empire,2026-11-20,19:48,single,1.85,67.71,125.26,won,
 B54,Duel,2026-11-20,19:49,single,1.85,77.40,143.19,won,
 B55,Empire,2026-11-20,22:08,3-fold,6.227,66.10,411.61,won,stake derived from payout
 B56,Duel,2026-11-20,22:09,3-fold,6.227,75.56,470.52,won,
-B57,Duel,2026-11-24,21:48,3-fold,5.952,72.00,0.00,open,"R14 window A: BAY-MAC U68.5 1.77, VAL-PAN U75.5 1.77, ASV-MIL U65.5 1.90; potential 428.58"
-B58,Duel,2026-11-24,21:48,2-fold,3.132,13.00,0.00,open,same night without ASV-MIL; the 1.90 leg's max-profit allowance was used by the 72 ticket; potential 40.73
-B59,Empire,2026-11-24,,3-fold,5.952,24.90,0.00,open,"same 3-fold on the other site; Empire capped this ticket at 25, took 24.90; potential 148.22"
+B57,Duel,2026-11-24,21:48,3-fold,5.952,72.00,428.58,won,"R14 window A: BAY-MAC U68.5 1.77, VAL-PAN U75.5 1.77, ASV-MIL U65.5 1.90; potential 428.58"
+B58,Duel,2026-11-24,21:48,2-fold,3.132,13.00,40.73,won,same night without ASV-MIL; the 1.90 leg's max-profit allowance was used by the 72 ticket; potential 40.73
+B59,Empire,2026-11-24,,3-fold,5.952,24.90,148.22,won,"same 3-fold on the other site; Empire capped this ticket at 25, took 24.90; potential 148.22"

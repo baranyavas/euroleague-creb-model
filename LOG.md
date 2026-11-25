@@ -2,6 +2,8 @@
 
 One line per session: what was done, what it produced, why.
 
+- 2026-11-25 — settled R14 night one: all three unders cleared (BAY-MAC 62 vs 68.5, VAL-PAN 60 vs 75.5, ASV-MIL 56 vs 65.5), so the Duel 72 + 13 and Empire 24.90 all won: 109.90 staked, 617.53 back, +507.63. Day bias −3.28, MAE 3.60; the model's worst read (VAL-PAN, −10.26) still cleared by 15.5. All three skipped games went under too (BJK-PRS 68 vs 72.5, BAR-FEN 62 vs 72). Running: 58 tickets, +5,897.03, ROI +195.2%.
+
 - 2026-11-24 — logged R14 night one: the window-A 3-fold (BAY-MAC U68.5, VAL-PAN U75.5, ASV-MIL U65.5) at Duel 72 and Empire 24.90, plus a Duel 2-fold of the first two legs for 13 because the 1.90 leg's max-profit allowance was used. **Empire capped this ticket at 25** — the first time it has sat below the 65-70 band, so watch whether it is a one-off, a per-combo cap or a general cut. Open tickets are now kept out of every P&L total and listed separately.
 
 - 2026-11-21 — relabelled 2026-11-06's 3-fold from Duel to Empire: the user confirmed Duel's first ticket is 11 Nov, so limit era E4 starts 2026-11-11 (E3 = 9 Oct – 10 Nov). Ledger: 55 tickets, 2,911.01 staked, net +5,389.40, ROI +185.1%; Empire 41 tickets +4,578.40, Duel 14 +811.00. Recorded the money rule on disk (flat 65 + 65, no ladder, 4-fold whenever four games fit one 45-minute window) so a compacted session cannot drift back to the ladder. Added `src/nights.py` + `reports/four_leg_nights_2026_27.md`: of the 53 remaining regular-season nights, 21 can hold four legs inside 45 minutes; R14 (24-25 Nov) is a 3-leg night both days, the first 4-fold night is 15 Dec.
