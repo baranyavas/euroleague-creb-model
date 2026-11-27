@@ -3,6 +3,7 @@ euroleague c-reb model v0.7
 
 pregame forecasting model:
 1) opportunity layer: fga + fg% -> expected missed fg
+   (v0.7.1: blended with a shrunk direct missed-FG average, see below)
 2) rebound realization: reboppr-o / reboppr-d
 3) team identity: shrunk current-vs-historical c-reb signal
 4) h2h: separate, stability-weighted anchor
@@ -11,6 +12,25 @@ pregame forecasting model:
 settlement target:
     c-reb = player-credited orb + player-credited drb
 team rebounds are excluded.
+
+v0.7.1 (2026-11-26) — opportunity layer
+----------------------------------------
+fga * (1 - fg%) is two noisy estimates multiplied together. A team that is
+shooting 45% over 13 games is not a 45% team, and the product extrapolates
+that noise. Measured on the 139 live games, the miss volume was the dominant
+error source: mean absolute contribution 6.17 against 3.37 for the rebound
+realisation, and the miss estimate itself had MAE 6.68.
+
+Replacing it with a shrunk direct average of observed missed FG per game
+(prior = league mean, 8 pseudo-games) cuts forecast MAE from 6.38 to 6.08 and
+improves every cut of the sample: first 70 games 6.78 -> 6.22, last 50 6.07 ->
+5.97, games with a recorded line 6.49 -> 6.26. The blend keeps 25% of the
+structural estimate so the pace/accuracy decomposition still speaks.
+
+Rejected after testing, for the record: blending in the opponent's defensive
+FG% (bias +1.6 to +3.7), conceding-based miss estimates (MAE 6.52-7.06),
+shrinking the rebound rates (MAE 6.17-6.23), and a global spread recalibration
+(the fitted slope was 0.48 on H1 and 0.93 on H2, i.e. not stable).
 """
 
 from __future__ import annotations
@@ -24,6 +44,11 @@ import pandas as pd
 
 HIST_CREB_INTERCEPT = 3.126
 HIST_CREB_MISSED_FG_BETA = 0.8719
+
+# v0.7.1 opportunity-layer blend. 0 = pure fga * (1 - fg%), 1 = pure shrunk
+# direct missed-FG average. 0.75 was the best of the tested grid and is the
+# more robust choice on the games that actually carry a provider line.
+MISS_DIRECT_WEIGHT = 0.75
 
 
 def clamp(value: float, low: float, high: float) -> float:
@@ -61,6 +86,31 @@ def team_identity_multiplier(
 def expected_missed_fg(fga: float, fg_pct: float) -> float:
     """Opportunity layer: expected missed field goals."""
     return max(0.0, fga * (1.0 - fg_pct))
+
+
+def blended_missed_fg(
+    profile: TeamProfile,
+    direct_weight: float = MISS_DIRECT_WEIGHT,
+) -> Optional[float]:
+    """
+    v0.7.1 opportunity layer: structural misses blended with the shrunk direct
+    average of observed missed FG per game.
+
+    fga * (1 - fg%) multiplies two small-sample estimates. The direct average
+    is already shrunk toward the league mean upstream, so it is the more
+    stable of the two early in a season; keeping a quarter of the structural
+    estimate preserves the pace/accuracy decomposition.
+    """
+    structural = None
+    if profile.fga is not None and profile.fg_pct is not None:
+        structural = expected_missed_fg(profile.fga, profile.fg_pct)
+
+    direct = profile.missed_fg
+    if direct is None:
+        return structural
+    if structural is None:
+        return direct
+    return (1.0 - direct_weight) * structural + direct_weight * direct
 
 
 def matchup_reboppr_o(
@@ -118,6 +168,11 @@ class TeamProfile:
     fg_pct: Optional[float] = None
     pace: Optional[float] = None
 
+    # v0.7.1: shrunk direct missed-FG average, already pulled toward the league
+    # mean by src/forecast.py. When present it is blended into the opportunity
+    # layer; when absent the model falls back to fga * (1 - fg%) alone.
+    missed_fg: Optional[float] = None
+
     reboppr_o: Optional[float] = None
     reboppr_d: Optional[float] = None
 
@@ -173,8 +228,8 @@ def base_forecast(matchup: MatchupInput, player_only: bool = False) -> float:
         and h.reboppr_o is not None and h.reboppr_d is not None
         and a.reboppr_o is not None and a.reboppr_d is not None
     ):
-        h_miss = expected_missed_fg(h.fga, h.fg_pct)
-        a_miss = expected_missed_fg(a.fga, a.fg_pct)
+        h_miss = blended_missed_fg(h)
+        a_miss = blended_missed_fg(a)
 
         if player_only:
             h_o, h_d = h.reboppr_o, h.reboppr_d
@@ -191,8 +246,9 @@ def base_forecast(matchup: MatchupInput, player_only: bool = False) -> float:
     else:
         total_miss = 0.0
         for p in (h, a):
-            if p.fga is not None and p.fg_pct is not None:
-                total_miss += expected_missed_fg(p.fga, p.fg_pct)
+            miss = blended_missed_fg(p)
+            if miss is not None:
+                total_miss += miss
 
         forecast = (
             HIST_CREB_INTERCEPT

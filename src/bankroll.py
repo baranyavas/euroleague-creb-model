@@ -127,8 +127,10 @@ def main(write: bool = False) -> None:
     say("## Weeks (W1 starts at the first ticket)")
     say("")
     say("```")
-    say(f"{'week':10} {'dates':25} {'n':>3}  {'W/L':<5} {'staked':>9} {'net':>10} {'ROI':>8}")
+    say(f"{'week':10} {'dates':25} {'n':>3}  {'W/L':<5} {'staked':>9} {'net':>10} "
+        f"{'ROI':>8} {'cum net':>10}")
     week = 1
+    cum = 0.0
     cur = first
     while cur <= last:
         hi = min(date.fromordinal(cur.toordinal() + 6), last)
@@ -136,8 +138,9 @@ def main(write: bool = False) -> None:
         s, _, n = totals(sub)
         won = sum(1 for r in sub if r["result"] == "won")
         roi = 100 * n / s if s else 0.0
+        cum += n
         say(f"W{week:<9} {cur} .. {hi}  {len(sub):>3}  {won:>2}/{len(sub)-won:<2}  "
-            f"{s:>9,.2f} {n:>+10,.2f} {roi:>+7.1f}%")
+            f"{s:>9,.2f} {n:>+10,.2f} {roi:>+7.1f}% {cum:>+10,.2f}")
         week += 1
         cur = date.fromordinal(hi.toordinal() + 1)
     say("```")

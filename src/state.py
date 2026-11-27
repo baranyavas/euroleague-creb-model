@@ -39,7 +39,7 @@ def main() -> None:
     decisions = _rows(config.ROOT / "data" / "decisions_2026_27.csv")
     under = sum(1 for d in decisions if d["result_recorded"] == "under")
     over = sum(1 for d in decisions if d["result_recorded"] == "over")
-    fc = [d for d in decisions if d["forecast"]]
+    fc = [d for d in decisions if d["forecast"] and d["actual_recorded"]]
     resid = [float(d["actual_recorded"]) - float(d["forecast"]) for d in fc]
 
     bt_path = config.REPORTS / "backtest_2026_27.csv"
@@ -119,6 +119,10 @@ def main() -> None:
         "- **Target:** player-credited rebounds only. c-reb = total-row T − team-row T.",
         "- **Model:** v0.7 two-stage (misses × player-only rebound rates) plus the",
         "  v0.8 shrunk residual correction. No new model, no extra features.",
+        "- **Opportunity layer (v0.7.1):** misses are 0.75 × the shrunk direct",
+        "  missed-FG average + 0.25 × `fga * (1 - fg%)`. Two small-sample",
+        "  estimates multiplied together was the largest error source; the blend",
+        "  cut backtest MAE 6.43 → 6.19. See `data/model_notes.md`.",
         "- **Player-only mode:** `base_forecast(..., player_only=True)` keeps",
         "  ORB+DRB at the settled level. The legacy blend forces ORB+DRB = 1.0",
         "  and silently re-adds team rebounds, so it is not used for pricing.",

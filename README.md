@@ -36,6 +36,7 @@ This settlement rule was re-checked after the 2026-10-02 games. Example: Besikta
 18. h2h stability / closeness signal
 19. adaptive residual calibration
 20. current-vs-h2h regime similarity (v0.8.2 research layer)
+21. shrunk direct missed-FG average, blended 0.75/0.25 with fga x (1 - fg%) (v0.7.1)
 
 ## 2025-26 first findings
 
@@ -166,6 +167,16 @@ v0.8 adds an empirical-Bayes style residual correction. the observed residual me
 this creates the desired behavior: the model can gradually move a forecast upward or downward when the data repeatedly show that it is miscalibrated, while remaining neutral when the evidence is weak.
 
 provider lines are never used to create this correction. market bias and model bias remain separate.
+
+## opportunity layer (v0.7.1, 2026-11-26)
+
+`fga * (1 - fg%)` multiplies two small-sample estimates. a team shooting 45% over 13 games is not a 45% team, and the product extrapolates that noise. on the 139 live games the miss volume was the dominant error source: mean absolute contribution 6.17 against 3.37 for the rebound realisation.
+
+misses are now `0.75 * shrunk direct missed-FG average + 0.25 * fga * (1 - fg%)`, with the direct average pulled toward the league mean by 8 pseudo-games.
+
+backtest effect: MAE 6.38 → 6.08 raw, 6.43 → 6.19 on the integrated pipeline; first 70 games 6.78 → 6.22, last 50 6.07 → 5.97, games carrying a line 6.49 → 6.26.
+
+tested and rejected: opponent defensive FG% in this layer, conceded-miss estimates, shrinking the rebound rates, and a global spread recalibration (the fitted slope moved from 0.48 to 0.93 between halves). see `data/model_notes.md`.
 
 ## regression layer
 

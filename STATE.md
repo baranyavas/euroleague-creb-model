@@ -54,6 +54,10 @@ Do not add the bottom-row O+D: those include the team-rebound bucket.
 - **Target:** player-credited rebounds only. c-reb = total-row T − team-row T.
 - **Model:** v0.7 two-stage (misses × player-only rebound rates) plus the
   v0.8 shrunk residual correction. No new model, no extra features.
+- **Opportunity layer (v0.7.1):** misses are 0.75 × the shrunk direct
+  missed-FG average + 0.25 × `fga * (1 - fg%)`. Two small-sample
+  estimates multiplied together was the largest error source; the blend
+  cut backtest MAE 6.43 → 6.19. See `data/model_notes.md`.
 - **Player-only mode:** `base_forecast(..., player_only=True)` keeps
   ORB+DRB at the settled level. The legacy blend forces ORB+DRB = 1.0
   and silently re-adds team rebounds, so it is not used for pricing.
@@ -126,12 +130,12 @@ sessions and the combo table; the card lands in
 ## Snapshot
 
 - 2025-26 baseline: 380 games, mean 62.00, median 61, sd 7.55, mean missed FG 67.54, reboppr-t 0.918.
-- 2026-27 to date: 136 games, mean 64.01, median 64, sd 8.05, mean missed FG 69.85, reboppr-t 0.916.
-- Last game in the dataset: 2026-11-24 (round 14), ASV-MIL 56 c-reb.
-- Recorded decisions: 46 games, 35 under / 8 over against the decision lines.
-- Recorded-forecast residuals (38): mean +1.19, MAE 5.69.
-- Retrospective backtest of the live pipeline: 129 games, MAE 6.56, bias -0.01, RMSE 7.96.
-- Rolling 3-round bias (rounds 11-13): +0.34.
+- 2026-27 to date: 140 games, mean 64.06, median 64, sd 8.01, mean missed FG 69.84, reboppr-t 0.917.
+- Last game in the dataset: 2026-11-25 (round 14), OLY-HAP 56 c-reb.
+- Recorded decisions: 50 games, 35 under / 9 over against the decision lines.
+- Recorded-forecast residuals (39): mean +1.38, MAE 5.76.
+- Retrospective backtest of the live pipeline: 139 games, MAE 6.19, bias -0.26, RMSE 7.69.
+- Rolling 3-round bias (rounds 12-14): +0.72.
 
 ## Coverage gap
 

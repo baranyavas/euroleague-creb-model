@@ -86,10 +86,43 @@ def team_index(rows: list[dict]) -> dict[tuple[str, str], list[dict]]:
     return idx
 
 
+# v0.7.1: pseudo-games pulling the direct missed-FG average toward the league
+# mean. Tested 4/6/8/12; the differences were small and 8 sat in the middle of
+# the flat region while doing best on games that carry a provider line.
+MISS_PRIOR_GAMES = 8.0
+LEAGUE_MISS_FALLBACK = 34.9
+
+
+def league_missed_fg(idx, as_of: str) -> float:
+    """League mean missed FG per team-game, using only games before as_of."""
+    total = 0.0
+    n = 0
+    for (team, season), rows in idx.items():
+        if season != config.LIVE_SEASON:
+            continue
+        for r in rows:
+            if r["date"] < as_of:
+                total += r["missed_fg"]
+                n += 1
+    if not n:
+        return LEAGUE_MISS_FALLBACK
+    return total / n
+
+
+def shrunk_missed_fg(cur_rows: list[dict], league_miss: float) -> float:
+    """Direct missed-FG average, shrunk toward the league mean."""
+    n = len(cur_rows)
+    if not n:
+        return league_miss
+    obs = sum(r["missed_fg"] for r in cur_rows) / n
+    return (n * obs + MISS_PRIOR_GAMES * league_miss) / (n + MISS_PRIOR_GAMES)
+
+
 def profiles_as_of(idx, as_of: str) -> dict[str, dict]:
     """Pre-game profile per team: current season before as_of, 2025-26 base."""
     teams = {team for team, _ in idx}
     out = {}
+    league_miss = league_missed_fg(idx, as_of)
     for team in teams:
         hist_rows = idx.get((team, config.BASE_SEASON), [])
         cur_rows = [r for r in idx.get((team, config.LIVE_SEASON), []) if r["date"] < as_of]
@@ -106,6 +139,7 @@ def profiles_as_of(idx, as_of: str) -> dict[str, dict]:
             "current_c_reb": cur["creb"] if cur else None,
             "current_games": cur["games"] if cur else 0,
             "historical_c_reb": hist["creb"] if hist else None,
+            "missed_fg": shrunk_missed_fg(cur_rows, league_miss),
         }
     return out
 

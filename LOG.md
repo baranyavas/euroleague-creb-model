@@ -2,6 +2,8 @@
 
 One line per session: what was done, what it produced, why.
 
+- 2026-11-26 — closed R14 night two and shipped v0.7.1. The night lost 187.00 (Dubai single 90, 2-fold 65 + 32): DUB-PRT 71 vs 70.5, BAS-EFE 72 vs 70.5, while OLY-HAP landed 56 (14.5 under) and the dropped RMA-ZAL 65 (7.5 under). BAS-EFE was not a FG% miss — the miss forecast was 70.0 vs 71 actual; Baskonia took 13 offensive rebounds on 36 misses (rate 0.361 vs 0.289 season). Across the season, though, miss volume *is* the dominant error: 6.17 of the 6.38 MAE against 3.37 for realisation. The opportunity layer now blends a shrunk direct missed-FG average (0.75) with `fga*(1-fg%)` (0.25); backtest 6.43 → 6.19, first 70 games 6.78 → 6.22, games with a line 6.49 → 6.26. Rejected and documented: opponent defensive FG%, conceded-miss estimates, shrinking rebound rates, global spread recalibration. Running: 61 tickets, +5,710.03, ROI +178.0%.
+
 - 2026-11-25 — logged B60: the Dubai-Partizan under 70.5 was taken at 90 and lost by 0.5 (71, nine rebounds in the last two minutes). The line was the best of the week on paper (+7.98 over a 62.52 model), so the bet was right and the result was variance — not a reason to touch the model. Site and price still missing; 25 Nov lines recorded in `decisions_2026_27.csv` before tip-off (OLY-HAP 70.5, BAS-EFE 70.5, RMA-ZAL 72.5).
 
 - 2026-11-25 — settled R14 night one: all three unders cleared (BAY-MAC 62 vs 68.5, VAL-PAN 60 vs 75.5, ASV-MIL 56 vs 65.5), so the Duel 72 + 13 and Empire 24.90 all won: 109.90 staked, 617.53 back, +507.63. Day bias −3.28, MAE 3.60; the model's worst read (VAL-PAN, −10.26) still cleared by 15.5. All three skipped games went under too (BJK-PRS 68 vs 72.5, BAR-FEN 62 vs 72). Running: 58 tickets, +5,897.03, ROI +195.2%.

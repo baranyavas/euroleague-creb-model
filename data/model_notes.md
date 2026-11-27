@@ -44,3 +44,29 @@ Not a new model. One correction, documented here so the record is complete:
   rule are untouched.
 
 Provider lines still never enter the forecast.
+
+## 2026-11-26 — opportunity layer (v0.7.1)
+
+Not a new model. One change to the first stage, measured before it was applied:
+
+- `fga * (1 - fg%)` multiplies two small-sample estimates. A team shooting 45%
+  over 13 games is not a 45% team, and the product extrapolates that noise.
+- Measured on the 139 live games, the miss volume was the dominant error source:
+  mean absolute contribution **6.17** against **3.37** for the rebound
+  realisation, and the miss estimate itself had MAE 6.68.
+- Replacement: shrunk direct average of observed missed FG per game (prior =
+  league mean as of that date, 8 pseudo-games), blended **0.75 / 0.25** with the
+  structural estimate.
+- Effect on the rolling pre-game backtest: MAE **6.38 → 6.08** raw, and
+  **6.43 → 6.19** on the integrated pipeline (139 games, bias −0.26). Every cut
+  improves: first 70 games 6.78 → 6.22, last 50 6.07 → 5.97, games with a
+  recorded line 6.49 → 6.26.
+- Rejected after testing, so nobody re-tries them blind:
+  - opponent defensive FG% in the opportunity layer (bias +1.6 to +3.7),
+  - conceded-miss estimates, own 50/50 with opponent (MAE 6.52) or alone (7.06),
+  - shrinking the rebound rates (MAE 6.17–6.23, always worse),
+  - a global spread recalibration. The fitted slope was 0.48 on H1 and 0.93 on
+    H2, so the apparent over-dispersion is a small-sample artefact.
+- The 25 November prices barely move (DUB 62.52 → 62.98, OLY 61.58 → 62.29,
+  BAS 64.93 → 64.87, RMA 70.11 → 69.84), which is the intended property: this
+  is a stability fix, not a re-pricing.
