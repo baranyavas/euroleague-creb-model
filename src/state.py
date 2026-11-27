@@ -8,7 +8,7 @@ from __future__ import annotations
 import csv
 import statistics
 
-from . import config
+from . import config, limits
 
 
 def _rows(path):
@@ -148,11 +148,11 @@ def main() -> None:
         "- Never add a live leg to a pregame ticket.",
         "- If a line is missing at decision time the leg is **dropped, not",
         "  filled**.",
-        "- Max **5 legs**, one settlement (c-reb). **No ticket-count cap** —",
-        "  the ledger has 3-ticket nights (24, 25 Nov), a 4-ticket night and a",
-        "  6-ticket night (17 Nov). A '2 tickets per night' line sat in this file",
-        "  from 2026-11-21 to 2026-11-28 and was wrong; removed at the user's",
-        "  correction.",
+        "- One settlement (c-reb). Max **5 legs**. No ticket-count cap and no",
+        "  session leg cap — a '2 tickets per night' line sat in this file from",
+        "  2026-11-21 to 2026-11-28 and was wrong; the ledger has 3-, 4- and",
+        "  6-ticket nights. The binding constraint is the per-match profit limit",
+        "  below.",
         "- Legs inside one session share the night's shooting environment. A",
         "  high-missed-FG night takes all of them at once; the 5-fold is not",
         "  five independent bets.",
@@ -168,12 +168,30 @@ def main() -> None:
         "  onları oynamaya devam edeceğim.\" Check the schedule for 4-leg nights",
         "  first; fall back to 3-, 2- or 1-leg tickets only when no window holds",
         "  four games.",
-        "- **Two sessions per night:** the first session is at most a 2-fold, the",
-        "  second at most a 3-fold (a 4-fold rides whichever window can hold it).",
-        "  On a three-window night each window is priced on its own merits; how",
-        "  many of them get a ticket is the user's call, not a cap.",
-        "- **No ticket-count cap.** No stake-size warnings — the user does not",
-        "  want them.",
+        "- **One limit, and it is per match: max profit.** Every site gives a",
+        "  match a maximum *profit*, not a maximum stake. The most that can go on",
+        "  a leg is `limit / (odds − 1)`: at a $90 limit that is 100 at 1.90,",
+        "  112.50 at 1.80, 116.88 at 1.77. If one ticket uses up a match's",
+        "  allowance, that match cannot be added to another ticket on the same",
+        "  site; the next ticket is built without it. That is the whole",
+        "  constraint — no ticket count, no session leg cap, no stake ladder.",
+        "  (24 Nov: the 1.90 leg's allowance was used by the 72 ticket, so the",
+        "  extra 13 went in as a 2-fold without it.)",
+        "- **Flat 65 + 65 stays the default** because at 65 the allowance is",
+        "  almost never the binding constraint: a 65 stake on a 1.77 leg risks 65",
+        "  to make 50, well under a 90 limit.",
+        "",
+        "```",
+        f"{'odds':>5} {'max stake':>10} {'profit':>7}   at a 90 limit",
+        *[
+            f"{o:5.2f} {limits.max_stake(o):10,.2f} "
+            f"{limits.profit(limits.max_stake(o), o):7,.2f}"
+            for o in (1.70, 1.75, 1.80, 1.85, 1.90, 1.95, 2.00)
+        ],
+        "```",
+        "",
+        "`python -m src.limits 1.90 1.77 --limit 90` for any other price.",
+        "",
         "- **Ledger of record:** `data/bets_2026_27.csv` (site, date, time, kind,",
         "  odds, stake, return, result, note). P&L comes from stake/return, never",
         "  from odds. Report: `./.venv/bin/python -m src.bankroll --write`.",
