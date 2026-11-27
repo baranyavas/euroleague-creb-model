@@ -93,7 +93,7 @@ E4 — iki site (65 + 65 $)    2026-11-11 .. 2026-11-25   27      64.4   90.00  
 - `2026-11-24` Duel 2-fold — same night without ASV-MIL; the 1.90 leg's max-profit allowance was used by the 72 ticket; potential 40.73
 - `2026-11-25` ? single — DUB-PRT under 70.5; actual 71 (nine rebounds in the last two minutes); site and price not stated
 - `2026-11-25` Duel 2-fold — OLY-HAP U70.5 1.80 + BAS-EFE U70.5 1.90; OLY-HAP landed 56 (under by 14.5), BAS-EFE 72 (over by 1.5)
-- `2026-11-25` Empire 2-fold — same 2-fold on the other site; stake split assumed (user said about 97 in total) — confirm
+- `2026-11-25` Empire 2-fold — same 2-fold on the other site; split confirmed by user: 65 Duel + 32 Empire = 97
 
 ## Excluded (screenshots but not c-reb)
 

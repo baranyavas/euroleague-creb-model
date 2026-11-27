@@ -120,6 +120,7 @@ def nights(data: list[dict]) -> dict[date, list[dict]]:
 
 def widest_window(sub: list[dict], window: int = config.COMBO_WINDOW_MIN) -> list[dict]:
     """The largest legal window: games tipping within `window` of the first."""
+    sub = sorted(sub, key=lambda g: g["utc"])
     best: list[dict] = []
     for i, first in enumerate(sub):
         grp = [
