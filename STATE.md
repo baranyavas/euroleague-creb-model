@@ -103,31 +103,33 @@ moment.
   onları oynamaya devam edeceğim." Check the schedule for 4-leg nights
   first; fall back to 3-, 2- or 1-leg tickets only when no window holds
   four games.
-- **One limit, and it is per match: max profit.** Every site gives a
-  match a maximum *profit*, not a maximum stake. The most that can go on
-  a leg is `limit / (odds − 1)`: at a $90 limit that is 100 at 1.90,
-  112.50 at 1.80, 116.88 at 1.77. If one ticket uses up a match's
-  allowance, that match cannot be added to another ticket on the same
-  site; the next ticket is built without it. That is the whole
-  constraint — no ticket count, no session leg cap, no stake ladder.
-  (24 Nov: the 1.90 leg's allowance was used by the 72 ticket, so the
-  extra 13 went in as a 2-fold without it.)
-- **Flat 65 + 65 stays the default** because at 65 the allowance is
-  almost never the binding constraint: a 65 stake on a 1.77 leg risks 65
-  to make 50, well under a 90 limit.
+- **One limit, and it is per match: max profit.** Each site gives each
+  *match* a maximum profit, not a maximum stake, and **the number is not
+  fixed** — Duel and Empire differ and it moves match to match. There is
+  no house limit in this repo; read it at the site when the line opens.
+  A single selection: `max stake = limit / (odds − 1)`.
+  A combo applies the same cap leg by leg, so the ticket can be staked at
+  most `min over legs of limit / (odds − 1)`. With similar limits the
+  **highest-odds leg binds and the other legs add nothing** — a
+  1.90 / 1.77 / 1.85 3-fold at a (hypothetical) 90 limit allows
+  100.00 / 116.88 / 105.88, so the ticket takes 100.00. Ten legs can be
+  combined; the top price still sets the stake. If one leg has a visibly
+  tighter limit it binds instead.
+- **Spending an allowance retires the match.** Use a match's whole
+  allowance in one ticket and it cannot go into another ticket on the
+  same site; the next ticket is built without it. (24 Nov: the 1.90
+  leg's allowance was used by the 72 ticket, so the extra 13 went in
+  without it.) That is the whole constraint — no ticket count, no
+  session leg cap, no stake ladder.
+- **Flat 65 + 65 stays the default.** A 65 stake needs an allowance of
+  only 58.50 at 1.90, 55.25 at 1.85, 50.05 at 1.77 — check it, but it is
+  usually the smaller constraint.
 
 ```
- odds  max stake  profit   at a 90 limit
- 1.70     128.57   90.00
- 1.75     120.00   90.00
- 1.80     112.50   90.00
- 1.85     105.88   90.00
- 1.90     100.00   90.00
- 1.95      94.73   89.99
- 2.00      90.00   90.00
+python -m src.limits 1.90 1.77 1.85 --limit 90   # ticket stake
+python -m src.limits 1.90:120 1.77:90            # per-leg limits
+python -m src.limits 1.90 1.77 --stake 65        # allowance 65 needs
 ```
-
-`python -m src.limits 1.90 1.77 --limit 90` for any other price.
 
 - **Ledger of record:** `data/bets_2026_27.csv` (site, date, time, kind,
   odds, stake, return, result, note). P&L comes from stake/return, never
